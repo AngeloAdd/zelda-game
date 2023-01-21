@@ -1,0 +1,17 @@
+{
+  "name": "zelda-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest",
+    "fix": "prettier ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "prettier": "^2.8.3"
+  }
+}
