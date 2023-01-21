@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "jest",
-    "fix": "prettier ."
+    "fix": "prettier -w ."
   },
   "author": "",
   "license": "ISC",
