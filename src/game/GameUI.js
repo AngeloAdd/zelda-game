@@ -38,6 +38,10 @@ class GameUI {
 		const playerCommand = await this._askPlayerNextCommand()
 		await this.gameStateMachine.parseUserCommand(playerCommand)
 
+		if (this.gameState.getUserCommandReaction()) {
+			this.printWithColors(this.gameState.getUserCommandReaction())
+		}
+
 		if (!this.gameState.isGameRunning) {
 			this._displayEndGameMessage()
 			return 0
@@ -47,9 +51,6 @@ class GameUI {
 	}
 
 	_printStatusBasedOnGameState() {
-		if (this.gameState.getUserCommandReaction()) {
-			this.printWithColors(this.gameState.getUserCommandReaction())
-		}
 		let roomInfo = this.gameState.getRoomInfo()
 
 		this.printWithColors(roomInfo.roomDescription[0], 'red')
