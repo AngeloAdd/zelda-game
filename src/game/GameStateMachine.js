@@ -135,7 +135,10 @@ module.exports = class StateMachine {
 		}
 		let reaction = ''
 		if (!this.state.getPlayerBagStatus().some((el) => el.name === monsterByRoom.weakness)) {
-			return this.state.gameEndingFor('EndDead' + monsterByRoom.name)
+			this.state.gameEndingFor('EndDead')
+			return monsterByRoom.name === 'Dracula'
+				? 'Dracula drains you of your blood while you helplessly struggle to hurt him.'
+				: "Medusa's gaze turns you to stone as you foolishly attack her."
 		} else {
 			this.state.monsters.forEach((el) => {
 				if (el.name === monsterByRoom.name) {

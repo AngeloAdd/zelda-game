@@ -167,16 +167,17 @@ describe('StateMachine command methods modify state correctly or not when', () =
 			expect(stateMachine.state.userCommandReaction).toEqual(defeatMessage)
 		})
 		test.each([
-			[5, 'Medusa'],
-			[6, 'Dracula']
-		])('causes player death if right weapon is not in player bag', (roomNumber, monsterName) => {
+			[5, "Medusa's gaze turns you to stone as you foolishly attack her."],
+			[6, 'Dracula drains you of your blood while you helplessly struggle to hurt him.']
+		])('causes player death if right weapon is not in player bag', (roomNumber, ending) => {
 			stateMachine.state.currentRoom = new Room(
 				roomNumber,
 				stateMachine.state.textLoader.roomsText[4]
 			)
 			stateMachine.parseUserCommand('ATTACK')
 			expect(stateMachine.state.isGameRunning).toEqual(false)
-			expect(stateMachine.state.endCause).toEqual('EndDead' + monsterName)
+			expect(stateMachine.state.endCause).toEqual('EndDead')
+			expect(stateMachine.state.userCommandReaction).toEqual(ending)
 		})
 		test('does nothing if player is not in front of a monster', () => {
 			stateMachine.parseUserCommand('ATTACK')

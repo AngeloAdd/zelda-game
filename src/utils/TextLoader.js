@@ -8,8 +8,7 @@ class TextLoader {
 
 	loadGameTexts() {
 		this.startText = this.readTxt('Start')
-		this.endDeadMedusa = this.readTxt('EndDeadMedusa')
-		this.endDeadDracula = this.readTxt('EndDeadDracula')
+		this.endDead = this.readTxt('EndDead')
 		this.endLose = this.readTxt('EndLose')
 		this.endWin = this.readTxt('EndWin')
 		this.roomsText = this.readTxt('Rooms')
@@ -24,10 +23,8 @@ class TextLoader {
 
 	getByEndCause(cause) {
 		switch (cause) {
-			case 'EndDeadMedusa':
-				return this.endDeadMedusa
-			case 'EndDeadDracula':
-				return this.endDeadDracula
+			case 'EndDead':
+				return this.endDead
 			case 'EndWin':
 				return this.endWin
 			case 'EndLose':
