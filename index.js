@@ -1,5 +1,6 @@
 const GameUI = require('./src/game/GameUI')
 const StateMachine = require('./src/game/GameStateMachine')
+const GameState = require('./src/game/GameState')
 const askQuestion = require('./src/utils/askQuestion')
 const printWithColors = require('./src/utils/printWithColors')
 
@@ -10,11 +11,11 @@ try {
 	console.error(e)
 	process.exit(e?.code ?? 1)
 }
-const GameState = require('./src/game/GameState')
+const gameState = new GameState(textLoader)
 
 const gameUI = new GameUI(
-	GameState,
-	new StateMachine(GameState, textLoader),
+	gameState,
+	new StateMachine(gameState, textLoader),
 	textLoader,
 	askQuestion,
 	printWithColors
