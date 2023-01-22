@@ -24,7 +24,7 @@ There is a room to your West, there is a room to your South.
 
 ##ROOM##
 Currently you are in Room 7, the armory of the dark army. This room is filled with weapons of dark magic, ready for the wizard's army to use in battle. The room is dark and ominous, with a sense of deadly power.
-There is a room to your West.
+There is a room to your East.
 
 ##ROOM##
 Currently you are in Room 8, the wizard's study. This room is filled with shelves of ancient books and potions, and a large desk where the evil wizard conducts his dark experiments.

@@ -1,4 +1,0 @@
-##PLAYER_NAME## Game Stats
-Monsters Killed: ##KILLED##
-Cash Earned: ##CASH##
-Game Result: ##RESULT##
