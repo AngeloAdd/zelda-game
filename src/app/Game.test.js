@@ -33,7 +33,7 @@ describe('Game command methods modify state correctly or not when', () => {
 		})
 		test('makes app end if from room 1 player goes west and exits the castle', () => {
 			stateMachine.parseUserCommand('MOVE WEST')
-			expect(stateMachine.state.isGameRunning).toEqual(false)
+			expect(stateMachine.state.isRunning).toEqual(false)
 			expect(stateMachine.state.endingReason).toEqual('lose')
 		})
 	})
@@ -157,12 +157,12 @@ describe('Game command methods modify state correctly or not when', () => {
 				stateMachine.state.roomsList[`${roomNumber}`].exits
 			)
 			expect(stateMachine.parseUserCommand('ATTACK')).toEqual(ending)
-			expect(stateMachine.state.isGameRunning).toEqual(false)
+			expect(stateMachine.state.isRunning).toEqual(false)
 			expect(stateMachine.state.endingReason).toEqual('dead')
 		})
 		test('does nothing if player is not in front of a monster', () => {
 			expect(stateMachine.parseUserCommand('ATTACK')).toEqual(
-				'You start moving your arms in the air. Are you ok?'
+				'You initUI moving your arms in the air. Are you ok?'
 			)
 		})
 	})
@@ -182,12 +182,12 @@ describe('Game command methods modify state correctly or not when', () => {
 			expect(stateMachine.parseUserCommand('EXIT')).toEqual(
 				'The princess beams with joy as she follows you, eager to put her horrible experience behind her.'
 			)
-			expect(stateMachine.state.isGameRunning).toEqual(false)
+			expect(stateMachine.state.isRunning).toEqual(false)
 			expect(stateMachine.state.endingReason).toEqual('win')
 		})
 		test('exits app with app over if not in room 9', () => {
 			expect(stateMachine.parseUserCommand('EXIT')).toEqual('Exiting the castle...')
-			expect(stateMachine.state.isGameRunning).toEqual(false)
+			expect(stateMachine.state.isRunning).toEqual(false)
 			expect(stateMachine.state.endingReason).toEqual('lose')
 		})
 	})

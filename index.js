@@ -6,7 +6,7 @@ const Prompt = require('./src/libs/Prompt')
 const TextLoader = require('./src/libs/TextLoader')
 
 async function main(loader, logger, prompt) {
-	return new GameUI(new Game(new GameState(loader.texts.rooms)), loader, logger, prompt).start()
+	return new GameUI(new Game(new GameState(loader.texts.rooms)), loader, logger, prompt).initUI()
 }
 
 if (require.main === module) {

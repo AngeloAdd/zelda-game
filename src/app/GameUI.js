@@ -1,13 +1,12 @@
 class GameUI {
-	constructor(gameStateMachine, loader, logger, prompt) {
-		this.gameStateMachine = gameStateMachine
+	constructor(game, loader, logger, prompt) {
+		this.game = game
 		this.textLoader = loader
 		this.logger = logger
 		this.prompt = prompt
-		this.gameState = gameStateMachine.state
 	}
 
-	async start() {
+	async initUI() {
 		try {
 			this._displayStartingMessage()
 			const playerName = await this._askPlayerName()
@@ -24,15 +23,15 @@ class GameUI {
 	}
 
 	async _handlePlayerCommand() {
-		this._displayGameStatus()
+		this._displayStatus()
 		const playerCommand = await this._askPlayerNextCommand()
-		const response = this.gameStateMachine.parseUserCommand(playerCommand)
+		const response = this.game.parseUserCommand(playerCommand)
 
 		if (response) {
 			this._displayGameResponse(response)
 		}
 
-		if (!this.gameState.isGameRunning) {
+		if (!this.game.state.isRunning) {
 			this._displayEndGameMessage()
 			return 0
 		} else {
@@ -46,8 +45,8 @@ class GameUI {
 		this.logger.printNewLine()
 	}
 
-	_displayGameStatus() {
-		let roomInfo = this.gameState.getRoomInfo()
+	_displayStatus() {
+		let roomInfo = this.game.state.getRoomInfo()
 
 		this.logger.printWithColors(
 			this.textLoader.getTextByKey(`rooms.${roomInfo.roomNumber}.description`),
@@ -55,14 +54,14 @@ class GameUI {
 		)
 		this.logger.printWithColors(roomInfo.roomExits, 'cyan')
 
-		let monsterByRoom = this.gameState.getMonsterByRoom()
+		let monsterByRoom = this.game.state.getMonsterByRoom()
 		if (monsterByRoom) {
 			let textToPrint = monsterByRoom.name.toLowerCase() + '.'
 			textToPrint += monsterByRoom.alive ? 'alive' : 'dead'
 			this.logger.printWithColors(this.textLoader.getTextByKey(textToPrint), 'blue')
 		}
 
-		this.gameState.getObjectsByRoom().forEach((el) => {
+		this.game.state.getObjectsByRoom().forEach((el) => {
 			this.logger.printWithColors(
 				this.textLoader.getTextByKey('object.laying', { objectName: el.name }),
 				'yellow'
@@ -73,7 +72,7 @@ class GameUI {
 			this.logger.printWithColors(this.textLoader.getTextByKey('princess.waiting'), 'blue')
 		}
 
-		let playerBagStatus = this.gameState.getPlayerBagStatus()
+		let playerBagStatus = this.game.state.getPlayerBagStatus()
 		this.logger.printWithColors(
 			this.textLoader.getTextByKey('bag.capacity', {
 				itemsNumber: playerBagStatus.length,
@@ -96,7 +95,7 @@ class GameUI {
 
 	_displayEndGameMessage() {
 		this.logger.printWithColors(
-			this.textLoader.getTextByKey(this.gameState.endingReason),
+			this.textLoader.getTextByKey(this.game.state.endingReason),
 			'magenta'
 		)
 	}

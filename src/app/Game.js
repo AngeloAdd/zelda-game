@@ -54,11 +54,7 @@ module.exports = class Game {
 			return 'Your bag is full you cannot pick up other objects.'
 		}
 
-		this.state.objects.forEach((el) => {
-			if (el.name === objectName) {
-				el.room = null
-			}
-		})
+		this.state.pickObject(objectName)
 
 		return `You picked ${objectName} and put it in your bag.`
 	}
@@ -99,11 +95,7 @@ module.exports = class Game {
 			return 'The room is full, you can not drop any object'
 		}
 
-		this.state.objects.forEach((el) => {
-			if (el.name === objectName) {
-				el.room = this.state.currentRoom.roomNumber
-			}
-		})
+		this.state.dropObject(objectName)
 
 		return `You dropped ${objectName} in room number ${this.state.currentRoom.roomNumber}`
 	}
@@ -115,27 +107,18 @@ module.exports = class Game {
 			return 'You start moving your arms in the air. Are you ok?'
 		}
 
-		let reaction = ''
-
 		if (!this.state.getPlayerBagStatus().some((el) => el.name === monsterByRoom.weakness)) {
 			this.state.setGameEnding('dead')
 			return monsterByRoom.name === 'Dracula'
 				? 'Dracula drains you of your blood while you helplessly struggle to hurt him.'
 				: "Medusa's gaze turns you to stone as you foolishly attack her."
-		} else {
-			this.state.monsters.forEach((el) => {
-				if (el.name === monsterByRoom.name) {
-					el.alive = false
-					reaction =
-						monsterByRoom.name === 'Dracula'
-							? 'The powerful vampire exudes an eerie silence as his body slowly disintegrates into dust.'
-							: "Medusa's eyes widen in horror as she realizes that her curse has now been turned against her."
-				}
-				return el
-			})
-
-			return reaction
 		}
+
+			this.state.killMonster(monsterByRoom.name)
+
+			return monsterByRoom.name === 'Dracula'
+					? 'The powerful vampire exudes an eerie silence as his body slowly disintegrates into dust.'
+					: "Medusa's eyes widen in horror as she realizes that her curse has now been turned against her."
 	}
 
 	exit() {

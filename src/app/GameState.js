@@ -12,7 +12,7 @@ module.exports = class GameState {
 		this.monsters = this._loadMonstersState()
 		this.roomsList = roomsList
 		this.currentRoom = new Room(1, this.roomsList['1'].exits)
-		this.isGameRunning = true
+		this.isRunning = true
 		this.endingReason = null
 	}
 
@@ -37,8 +37,33 @@ module.exports = class GameState {
 	}
 
 	setGameEnding(reason) {
-		this.isGameRunning = false
+		this.isRunning = false
 		this.endingReason = reason
+	}
+
+	pickObject(objectName){
+		this.objects.forEach((el) => {
+			if (el.name === objectName) {
+				el.room = null
+			}
+		})
+	}
+
+	dropObject(objectName){
+		this.objects.forEach((el) => {
+			if (el.name === objectName) {
+				el.room = this.currentRoom.roomNumber
+			}
+		})
+	}
+
+	killMonster(monsterName){
+		this.monsters.forEach((el) => {
+			if (el.name === monsterName) {
+				el.alive = false
+			}
+			return el
+		})
 	}
 
 	_loadObjectsState() {
