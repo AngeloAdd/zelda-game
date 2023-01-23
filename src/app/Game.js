@@ -13,36 +13,41 @@ module.exports = class Game {
 
 	parseUserCommand(playerCommand) {
 		const fullCommand = playerCommand.toLowerCase().trim()
-		let baseCommand = BASE_COMMANDS.filter((el) => fullCommand.includes(el))[0]
+		const baseCommand = BASE_COMMANDS.filter((el) => fullCommand.includes(el))[0]
+		const param = this._getParam(fullCommand, baseCommand)
 
-		return this.updateState(baseCommand, fullCommand)
+		return this._updateState(baseCommand, param)
 	}
 
-	updateState(baseCommand, fullCommand) {
+	_updateState(baseCommand, param) {
 		switch (baseCommand) {
 			case 'move':
-				return this.moveWithDirection(this.getParam(fullCommand, baseCommand))
+				return this._moveWithDirection(param)
 			case 'pick':
-				return this.pickObject(this.getParam(fullCommand, baseCommand).toUpperCase())
+				return this._pickObject(param.toUpperCase())
 			case 'drop':
-				return this.dropObject(this.getParam(fullCommand, baseCommand).toUpperCase())
+				return this._dropObject(param.toUpperCase())
 			case 'attack':
-				return this.attack()
+				return this._attack()
 			case 'exit':
-				return this.exit()
+				return this._exit()
 			case 'look':
-				return this.look()
+				return this._look()
 			default:
 				return 'Invalid command'
 		}
 	}
 
-	getParam(fullCommand, baseCommand) {
-		return fullCommand.replace(baseCommand + ' ', '')
+	_getParam(fullCommand, baseCommand) {
+		return fullCommand
+			.split(' ')
+			.filter((el) => !el.includes(baseCommand))
+			.join(' ')
+			.trim()
 	}
 
-	pickObject(objectName) {
-		if (!objectName || objectName === 'PICK') {
+	_pickObject(objectName) {
+		if (!objectName) {
 			return 'You should specify an object.'
 		}
 		let objectsByRoom = this.state.getObjectsByRoom()
@@ -59,7 +64,7 @@ module.exports = class Game {
 		return `You picked ${objectName} and put it in your bag.`
 	}
 
-	moveWithDirection(direction) {
+	_moveWithDirection(direction) {
 		const room = this.state.getRoomInfo()
 
 		if (!direction || !room.hasExit(direction)) {
@@ -81,8 +86,8 @@ module.exports = class Game {
 		return `Moving ${direction.toUpperCase()}`
 	}
 
-	dropObject(objectName) {
-		if (!objectName || objectName === 'DROP') {
+	_dropObject(objectName) {
+		if (!objectName) {
 			return 'You should specify an object.'
 		}
 
@@ -100,7 +105,7 @@ module.exports = class Game {
 		return `You dropped ${objectName} in room number ${this.state.currentRoom.roomNumber}`
 	}
 
-	attack() {
+	_attack() {
 		let monsterByRoom = this.state.getMonsterByRoom()
 
 		if (!monsterByRoom) {
@@ -114,14 +119,14 @@ module.exports = class Game {
 				: "Medusa's gaze turns you to stone as you foolishly attack her."
 		}
 
-			this.state.killMonster(monsterByRoom.name)
+		this.state.killMonster(monsterByRoom.name)
 
-			return monsterByRoom.name === 'Dracula'
-					? 'The powerful vampire exudes an eerie silence as his body slowly disintegrates into dust.'
-					: "Medusa's eyes widen in horror as she realizes that her curse has now been turned against her."
+		return monsterByRoom.name === 'Dracula'
+			? 'The powerful vampire exudes an eerie silence as his body slowly disintegrates into dust.'
+			: "Medusa's eyes widen in horror as she realizes that her curse has now been turned against her."
 	}
 
-	exit() {
+	_exit() {
 		if (this.state.currentRoom.roomNumber === 9) {
 			this.state.setGameEnding('win')
 			return 'The princess beams with joy as she follows you, eager to put her horrible experience behind her.'
@@ -131,7 +136,7 @@ module.exports = class Game {
 		}
 	}
 
-	look() {
+	_look() {
 		return "You cautiously scan the room, feeling as if the room's eerie presence is staring at you in return."
 	}
 }

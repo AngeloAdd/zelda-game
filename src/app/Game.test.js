@@ -162,7 +162,7 @@ describe('Game command methods modify state correctly or not when', () => {
 		})
 		test('does nothing if player is not in front of a monster', () => {
 			expect(stateMachine.parseUserCommand('ATTACK')).toEqual(
-				'You initUI moving your arms in the air. Are you ok?'
+				'You start moving your arms in the air. Are you ok?'
 			)
 		})
 	})
@@ -175,10 +175,7 @@ describe('Game command methods modify state correctly or not when', () => {
 	})
 	describe('exit command', () => {
 		test('exits app with win if in room 9', () => {
-			stateMachine.state.currentRoom = new Room(
-				9,
-				stateMachine.state.roomsList[`${9}`].exits
-			)
+			stateMachine.state.currentRoom = new Room(9, stateMachine.state.roomsList[`${9}`].exits)
 			expect(stateMachine.parseUserCommand('EXIT')).toEqual(
 				'The princess beams with joy as she follows you, eager to put her horrible experience behind her.'
 			)

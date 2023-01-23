@@ -41,7 +41,7 @@ module.exports = class GameState {
 		this.endingReason = reason
 	}
 
-	pickObject(objectName){
+	pickObject(objectName) {
 		this.objects.forEach((el) => {
 			if (el.name === objectName) {
 				el.room = null
@@ -49,7 +49,7 @@ module.exports = class GameState {
 		})
 	}
 
-	dropObject(objectName){
+	dropObject(objectName) {
 		this.objects.forEach((el) => {
 			if (el.name === objectName) {
 				el.room = this.currentRoom.roomNumber
@@ -57,7 +57,7 @@ module.exports = class GameState {
 		})
 	}
 
-	killMonster(monsterName){
+	killMonster(monsterName) {
 		this.monsters.forEach((el) => {
 			if (el.name === monsterName) {
 				el.alive = false
