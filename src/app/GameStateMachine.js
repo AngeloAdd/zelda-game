@@ -1,4 +1,5 @@
 const Room = require('./DTO/Room')
+
 const BASE_COMMANDS = ['move', 'look', 'attack', 'drop', 'pick', 'exit']
 
 module.exports = class StateMachine {

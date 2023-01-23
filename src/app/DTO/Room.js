@@ -1,4 +1,5 @@
 const DIRECTIONS = ['south', 'north', 'east', 'west']
+
 module.exports = class Room {
 	constructor(roomNumber, roomDescription) {
 		this.roomNumber = roomNumber
