@@ -1,8 +1,8 @@
 const GameUI = require('./src/game/GameUI')
 const StateMachine = require('./src/game/GameStateMachine')
 const GameState = require('./src/game/GameState')
-const askQuestion = require('./src/utils/askQuestion')
-const printWithColors = require('./src/utils/printWithColors')
+const Logger = require('./src/utils/Logger')
+const Prompt = require('./src/utils/Prompt')
 
 let textLoader
 try {
@@ -11,14 +11,17 @@ try {
 	console.error(e)
 	process.exit(e?.code ?? 1)
 }
+
 const gameState = new GameState(textLoader)
+
+let logger = new Logger()
 
 const gameUI = new GameUI(
 	gameState,
 	new StateMachine(gameState, textLoader),
 	textLoader,
-	askQuestion,
-	printWithColors
+	logger,
+	new Prompt(logger)
 )
 
 async function main(game) {
