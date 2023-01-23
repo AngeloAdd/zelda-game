@@ -1,31 +1,23 @@
-const GameUI = require('./src/game/GameUI')
-const StateMachine = require('./src/game/GameStateMachine')
-const GameState = require('./src/game/GameState')
-const Logger = require('./src/utils/Logger')
-const Prompt = require('./src/utils/Prompt')
+const GameUI = require('./src/app/GameUI')
+const StateMachine = require('./src/app/GameStateMachine')
+const GameState = require('./src/app/GameState')
+const Logger = require('./src/libs/Logger')
+const Prompt = require('./src/libs/Prompt')
+const TextLoader = require('./src/libs/TextLoader')
 
-let textLoader
-try {
-	textLoader = require('./src/utils/TextLoader')
-} catch (e) {
-	console.error(e)
-	process.exit(e?.code ?? 1)
+async function main(loader, logger, prompt) {
+	return new GameUI(new StateMachine(new GameState(loader)), logger, prompt).start()
 }
 
-const gameState = new GameState(textLoader)
-
-let logger = new Logger()
-
-const gameUI = new GameUI(
-	gameState,
-	new StateMachine(gameState, textLoader),
-	textLoader,
-	logger,
-	new Prompt(logger)
-)
-
-async function main(game) {
-	return game.start()
+if (require.main === module) {
+	try {
+		main(new TextLoader(), new Logger(), new Prompt())
+			.then((code) => process.exit(code))
+			.catch((asyncError) => console.error(asyncError))
+	} catch (syncError) {
+		console.error(syncError)
+		process.exit(1)
+	}
 }
 
-main(gameUI).then(process.exit).catch(console.error)
+module.exports = main
