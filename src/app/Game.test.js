@@ -1,20 +1,19 @@
 const TextLoader = require('../libs/TextLoader')
-const StateMachine = require('./GameStateMachine')
+const Game = require('./Game')
 const GameState = require('./GameState')
 const Object = require('./DTO/Object')
 const Room = require('./DTO/Room')
 
 let stateMachine
 beforeEach(() => {
-	let textLoader = new TextLoader()
-	stateMachine = new StateMachine(new GameState(textLoader), textLoader)
+	stateMachine = new Game(new GameState(new TextLoader().texts.rooms))
 })
 
 afterEach(() => {
 	stateMachine = null
 })
 
-describe('StateMachine command methods modify state correctly or not when', () => {
+describe('Game command methods modify state correctly or not when', () => {
 	describe('move command', () => {
 		test.each(['MOVE S', 'MOVE', 'MOVE ', 'MOVE NORTH'])('returns invalid message', (command) => {
 			expect(stateMachine.parseUserCommand(command)).toEqual('Invalid direction!')
@@ -140,7 +139,7 @@ describe('StateMachine command methods modify state correctly or not when', () =
 		])('kills %s in room %i with %s', (monsterName, roomNumber, objectName, defeatMessage) => {
 			stateMachine.state.currentRoom = new Room(
 				roomNumber,
-				stateMachine.state.textLoader.texts.rooms[`${roomNumber}`]
+				stateMachine.state.roomsList[`${roomNumber}`].exits
 			)
 			stateMachine.state.objects.forEach((el) => (el.name === objectName ? (el.room = null) : null))
 
@@ -155,7 +154,7 @@ describe('StateMachine command methods modify state correctly or not when', () =
 		])('causes player death if right weapon is not in player bag', (roomNumber, ending) => {
 			stateMachine.state.currentRoom = new Room(
 				roomNumber,
-				stateMachine.state.textLoader.texts.rooms[`${roomNumber}`]
+				stateMachine.state.roomsList[`${roomNumber}`].exits
 			)
 			expect(stateMachine.parseUserCommand('ATTACK')).toEqual(ending)
 			expect(stateMachine.state.isGameRunning).toEqual(false)
@@ -178,7 +177,7 @@ describe('StateMachine command methods modify state correctly or not when', () =
 		test('exits app with win if in room 9', () => {
 			stateMachine.state.currentRoom = new Room(
 				9,
-				stateMachine.state.textLoader.texts.rooms[`${9}`]
+				stateMachine.state.roomsList[`${9}`].exits
 			)
 			expect(stateMachine.parseUserCommand('EXIT')).toEqual(
 				'The princess beams with joy as she follows you, eager to put her horrible experience behind her.'

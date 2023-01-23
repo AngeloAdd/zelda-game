@@ -1,11 +1,10 @@
 class GameUI {
-	constructor(gameStateMachine, logger, prompt) {
+	constructor(gameStateMachine, loader, logger, prompt) {
 		this.gameStateMachine = gameStateMachine
+		this.textLoader = loader
 		this.logger = logger
 		this.prompt = prompt
-
 		this.gameState = gameStateMachine.state
-		this.textLoader = this.gameState.textLoader
 	}
 
 	async start() {
@@ -50,8 +49,11 @@ class GameUI {
 	_displayGameStatus() {
 		let roomInfo = this.gameState.getRoomInfo()
 
-		this.logger.printWithColors(roomInfo.roomDescription, 'red')
-		this.logger.printWithColors(roomInfo.roomExitsText, 'cyan')
+		this.logger.printWithColors(
+			this.textLoader.getTextByKey(`rooms.${roomInfo.roomNumber}.description`),
+			'red'
+		)
+		this.logger.printWithColors(roomInfo.roomExits, 'cyan')
 
 		let monsterByRoom = this.gameState.getMonsterByRoom()
 		if (monsterByRoom) {

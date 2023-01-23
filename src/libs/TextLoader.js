@@ -7,7 +7,7 @@ module.exports = class TextLoader {
 		this._loadGameTexts()
 	}
 
-	getTextByKey(key, substitution, preserveObject = false) {
+	getTextByKey(key, substitution) {
 		const keyRecursive = key.split('.')
 		let textFromJson = this.texts
 
@@ -24,10 +24,8 @@ module.exports = class TextLoader {
 			}
 		}
 
-		if (!preserveObject) {
-			if (!(typeof textFromJson === 'string')) {
-				throw new Error('No text available under this key')
-			}
+		if (!(typeof textFromJson === 'string')) {
+			throw new Error('No text available under this key')
 		}
 
 		return textFromJson

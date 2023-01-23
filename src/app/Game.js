@@ -1,8 +1,12 @@
-const Room = require('./DTO/Room')
-
 const BASE_COMMANDS = ['move', 'look', 'attack', 'drop', 'pick', 'exit']
+const MAP_DIRECTION_TO_ROOM_INCREMENT = {
+	south: 3,
+	north: -3,
+	east: 1,
+	west: -1
+}
 
-module.exports = class StateMachine {
+module.exports = class Game {
 	constructor(state) {
 		this.state = state
 	}
@@ -62,7 +66,7 @@ module.exports = class StateMachine {
 	moveWithDirection(direction) {
 		const room = this.state.getRoomInfo()
 
-		if (!direction || !room.roomExitsList.includes(direction)) {
+		if (!direction || !room.hasExit(direction)) {
 			return 'Invalid direction!'
 		}
 
@@ -70,27 +74,14 @@ module.exports = class StateMachine {
 			return 'The door is protected by the monster'
 		}
 
-		const roomNumber = room.roomNumber
-
-		if (roomNumber === 1 && direction === 'west') {
+		if (room.roomNumber === 1 && direction === 'west') {
 			this.state.setGameEnding('lose')
 			return null
 		}
 
-		const directionMapToRoomNumberIncrement = {
-			south: 3,
-			north: -3,
-			east: 1,
-			west: -1
-		}
+		let newRoomNumber = room.roomNumber + MAP_DIRECTION_TO_ROOM_INCREMENT[direction]
+		this.state.setRoomByNumber(newRoomNumber)
 
-		let newRoomNumber = roomNumber + directionMapToRoomNumberIncrement[direction]
-		this.state.setRoom(
-			new Room(
-				newRoomNumber,
-				this.state.textLoader.getTextByKey(`rooms.${newRoomNumber}`, {}, true)
-			)
-		)
 		return `Moving ${direction.toUpperCase()}`
 	}
 

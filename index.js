@@ -1,12 +1,12 @@
 const GameUI = require('./src/app/GameUI')
-const StateMachine = require('./src/app/GameStateMachine')
+const Game = require('./src/app/Game')
 const GameState = require('./src/app/GameState')
 const Logger = require('./src/libs/Logger')
 const Prompt = require('./src/libs/Prompt')
 const TextLoader = require('./src/libs/TextLoader')
 
 async function main(loader, logger, prompt) {
-	return new GameUI(new StateMachine(new GameState(loader)), logger, prompt).start()
+	return new GameUI(new Game(new GameState(loader.texts.rooms)), loader, logger, prompt).start()
 }
 
 if (require.main === module) {

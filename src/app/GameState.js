@@ -6,12 +6,12 @@ const ONE_MILION = 1000000
 const HALF_MILION = ONE_MILION / 2
 
 module.exports = class GameState {
-	constructor(textLoader) {
-		this.textLoader = textLoader
+	constructor(roomsList) {
 		//this will be demanded to a builder -> random config or reading from config file for objects monster and rooms
 		this.objects = this._loadObjectsState()
 		this.monsters = this._loadMonstersState()
-		this.currentRoom = new Room(1, this.textLoader.getTextByKey(`rooms.${1}`, {}, true))
+		this.roomsList = roomsList
+		this.currentRoom = new Room(1, this.roomsList['1'].exits)
 		this.isGameRunning = true
 		this.endingReason = null
 	}
@@ -32,8 +32,8 @@ module.exports = class GameState {
 		return this.objects.filter((el) => el.room === null)
 	}
 
-	setRoom(room) {
-		this.currentRoom = room
+	setRoomByNumber(roomNumber) {
+		this.currentRoom = new Room(roomNumber, this.roomsList[`${roomNumber}`].exits)
 	}
 
 	setGameEnding(reason) {
