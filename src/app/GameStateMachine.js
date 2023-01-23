@@ -2,9 +2,10 @@ const Room = require('./DTO/Room')
 const BASE_COMMANDS = ['move', 'look', 'attack', 'drop', 'pick', 'exit']
 
 module.exports = class StateMachine {
-	constructor(state, textLoader) {
+	constructor(state) {
 		this.state = state
-		this.textLoader = textLoader
+
+		this.textLoader = this.state.textLoader
 	}
 
 	parseUserCommand(playerCommand) {
@@ -130,7 +131,10 @@ module.exports = class StateMachine {
 			this.state.monsters.forEach((el) => {
 				if (el.name === monsterByRoom.name) {
 					el.alive = false
-					reaction = el.defeat
+					reaction =
+						monsterByRoom.name === 'Dracula'
+							? 'The powerful vampire exudes an eerie silence as his body slowly disintegrates into dust.'
+							: "Medusa's eyes widen in horror as she realizes that her curse has now been turned against her."
 				}
 				return el
 			})

@@ -1,4 +1,4 @@
-const textLoader = require('../utils/TextLoader')
+const TextLoader = require('../libs/TextLoader')
 const StateMachine = require('./GameStateMachine')
 const GameState = require('./GameState')
 const Object = require('./DTO/Object')
@@ -6,6 +6,7 @@ const Room = require('./DTO/Room')
 
 let stateMachine
 beforeEach(() => {
+	let textLoader = new TextLoader()
 	stateMachine = new StateMachine(new GameState(textLoader), textLoader)
 })
 
@@ -31,7 +32,7 @@ describe('StateMachine command methods modify state correctly or not when', () =
 			;['MOVE EAST', 'MOVE SOUTH', 'MOVE SOUTH'].forEach((el) => stateMachine.parseUserCommand(el))
 			expect(stateMachine.state.currentRoom.roomNumber).toEqual(5)
 		})
-		test('makes game end if from room 1 player goes west and exits the castle', () => {
+		test('makes app end if from room 1 player goes west and exits the castle', () => {
 			stateMachine.parseUserCommand('MOVE WEST')
 			expect(stateMachine.state.isGameRunning).toEqual(false)
 			expect(stateMachine.state.endCause).toEqual('EndLose')
@@ -180,7 +181,7 @@ describe('StateMachine command methods modify state correctly or not when', () =
 		})
 	})
 	describe('exit command', () => {
-		test('exits game with win if in room 9', () => {
+		test('exits app with win if in room 9', () => {
 			stateMachine.state.currentRoom = new Room(9, stateMachine.textLoader.roomsText[8])
 			expect(stateMachine.parseUserCommand('EXIT')).toEqual(
 				'The princess beams with joy as she follows you, eager to put her horrible experience behind her.'
@@ -188,7 +189,7 @@ describe('StateMachine command methods modify state correctly or not when', () =
 			expect(stateMachine.state.isGameRunning).toEqual(false)
 			expect(stateMachine.state.endCause).toEqual('EndWin')
 		})
-		test('exits game with game over if not in room 9', () => {
+		test('exits app with app over if not in room 9', () => {
 			expect(stateMachine.parseUserCommand('EXIT')).toEqual('Exiting the castle...')
 			expect(stateMachine.state.isGameRunning).toEqual(false)
 			expect(stateMachine.state.endCause).toEqual('EndLose')

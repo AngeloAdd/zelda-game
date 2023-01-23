@@ -27,20 +27,8 @@ module.exports = class GameState {
 
 	loadMonstersState() {
 		return [
-			new Monster(
-				'Medusa',
-				5,
-				true,
-				'MIRROR SHIELD',
-				"Medusa's eyes widen in horror as she realizes that her curse has now been turned against her."
-			),
-			new Monster(
-				'Dracula',
-				6,
-				true,
-				'SILVER SWORD',
-				'The powerful vampire exudes an eerie silence as his body slowly disintegrates into dust.'
-			)
+			new Monster('Medusa', 5, true, 'MIRROR SHIELD'),
+			new Monster('Dracula', 6, true, 'SILVER SWORD')
 		]
 	}
 

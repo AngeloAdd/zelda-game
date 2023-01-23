@@ -1,19 +1,18 @@
 class GameUI {
-	constructor(gameState, gameStateMachine, textLoader, logger, prompt) {
-		this.gameState = gameState
+	constructor(gameStateMachine, logger, prompt) {
 		this.gameStateMachine = gameStateMachine
-		this.textLoader = textLoader
 		this.logger = logger
 		this.prompt = prompt
+
+		this.gameState = gameStateMachine.state
+		this.textLoader = this.gameState.textLoader
 	}
 
 	async start() {
 		try {
 			this._displayStartingMessage()
 			const playerName = await this._askPlayerName()
-			this._displayGameResponse(
-				this.textLoader.getTextByKey('player_name_response', { playerName })
-			)
+			this._displayGameResponse(this.textLoader.getTextByKey('player.nameResponse', { playerName }))
 			return this._handlePlayerCommand()
 		} catch (e) {
 			console.error(e)
@@ -22,7 +21,7 @@ class GameUI {
 	}
 
 	_displayStartingMessage() {
-		this.logger.printWithColors(this.textLoader.getTextByKey('starting_text'), 'magenta')
+		this.logger.printWithColors(this.textLoader.getTextByKey('startingText'), 'magenta')
 	}
 
 	async _handlePlayerCommand() {
@@ -38,7 +37,7 @@ class GameUI {
 			this._displayEndGameMessage()
 			return 0
 		} else {
-			await this._handlePlayerCommand()
+			return await this._handlePlayerCommand()
 		}
 	}
 
@@ -54,32 +53,43 @@ class GameUI {
 		this.logger.printWithColors(roomInfo.roomDescription[0], 'red')
 		this.logger.printWithColors(roomInfo.roomDescription[1], 'cyan')
 
-		if (this.gameState.getMonsterByRoom()) {
-			this.logger.printWithColors(this.gameState.getMonsterByRoom().getText(), 'blue')
+		let monsterByRoom = this.gameState.getMonsterByRoom()
+		if (monsterByRoom) {
+			let textToPrint = monsterByRoom.name.toLowerCase() + '.'
+			textToPrint += monsterByRoom.alive ? 'alive' : 'dead'
+			this.logger.printWithColors(this.textLoader.getTextByKey(textToPrint), 'blue')
 		}
 
 		this.gameState.getObjectsByRoom().forEach((el) => {
-			this.logger.printWithColors(`The ${el.name} is lying on the floor.`, 'yellow')
+			this.logger.printWithColors(
+				this.textLoader.getTextByKey('object.laying', { objectName: el.name }),
+				'yellow'
+			)
 		})
 
 		if (roomInfo.roomNumber === 9) {
-			this.logger.printWithColors(
-				'The princess trembles in fear as she kneels at the feet of the sacrifice altar, waiting for her fate to be sealed.',
-				'blue'
-			)
+			this.logger.printWithColors(this.textLoader.getTextByKey('princess.waiting'), 'blue')
 		}
 
 		let playerBagStatus = this.gameState.getPlayerBagStatus()
-		this.logger.printWithColors(`Your bag contains ${playerBagStatus.length}/3 items:`, 'green')
+		this.logger.printWithColors(
+			this.textLoader.getTextByKey('bag.capacity', {
+				itemsNumber: playerBagStatus.length,
+				capacity: 3
+			}),
+			'green'
+		)
 		playerBagStatus.forEach((el) => this.logger.printWithColors(el.name, 'green'))
 		this.logger.printWithColors(
-			`Current cash: ${playerBagStatus.reduce((acc, cur) => cur.value + acc, 0)}`,
+			this.textLoader.getTextByKey('cashStatus', {
+				amount: playerBagStatus.reduce((acc, cur) => cur.value + acc, 0)
+			}),
 			'gray'
 		)
 	}
 
 	async _askPlayerNextCommand() {
-		return this.prompt.ask('What do you want to do?')
+		return this.prompt.ask(this.textLoader.getTextByKey('player.question'))
 	}
 
 	_displayEndGameMessage() {
@@ -87,7 +97,7 @@ class GameUI {
 	}
 
 	async _askPlayerName() {
-		return this.prompt.ask(this.textLoader.getTextByKey('player_name'))
+		return this.prompt.ask(this.textLoader.getTextByKey('player.nameQuestion'))
 	}
 }
 

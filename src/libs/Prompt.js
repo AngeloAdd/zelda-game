@@ -7,15 +7,12 @@ const rl = require('readline').createInterface({
 const prompt = util.promisify(rl.question).bind(rl)
 
 module.exports = class Prompt {
-	constructor(logger) {
-		this.logger = logger
-	}
+	constructor() {}
 
 	async ask(question) {
 		let answer
 		try {
-			this.logger.printWithColors(question, '', '', 'bright')
-			answer = await prompt('')
+			answer = await prompt('\x1b[1m' + question + ' : \x1b[0m')
 		} catch (e) {
 			console.error(e)
 			process.exit(1)

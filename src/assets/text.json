@@ -1,0 +1,32 @@
+{
+	"player": {
+		"nameQuestion": "What is your name, brave warrior?",
+		"nameResponse": "Welcome ##playerName##!",
+		"question": "What do you want to do?"
+	},
+	"princess": {
+		"reaction": {
+			"medusa": "The princess turns to the ominous statue with snake-like hairs.",
+			"dracula": "The princess stares at the pile of dust, wondering what horror it conceals."
+		},
+		"waiting": "The princess trembles in fear as she kneels at the feet of the sacrifice altar, waiting for her fate to be sealed.",
+		"following": "The princess looks at you with hope in her eyes."
+	},
+	"object": {
+		"dropped": "",
+		"laying": "The ##objectName## is lying on the floor.",
+		"picked": ""
+	},
+	"bag": {
+		"capacity": "Your bag contains ##itemsNumber##/##capacity## items:"
+	},
+	"medusa": {
+		"alive": "Medusa, the terrifying monster with snakes for hair, guards a locked door, turning those who dare to look at her gaze to stone.",
+		"dead": "An ominous statue stand at the center of the room, with a hundred of snake eyes piercing your soul."
+	},
+	"dracula": {
+		"alive": "Dracula, the immortal vampire, stands guard at a locked door, his piercing gaze daring anyone to try and enter.",
+		"dead": "A small pile of ash and dust lies on the floor, the remnants of a once powerful being."
+	},
+	"cashStatus": "Current cash: ##amount##"
+}
