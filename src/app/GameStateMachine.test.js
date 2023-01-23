@@ -35,7 +35,7 @@ describe('StateMachine command methods modify state correctly or not when', () =
 		test('makes app end if from room 1 player goes west and exits the castle', () => {
 			stateMachine.parseUserCommand('MOVE WEST')
 			expect(stateMachine.state.isGameRunning).toEqual(false)
-			expect(stateMachine.state.endCause).toEqual('EndLose')
+			expect(stateMachine.state.endingReason).toEqual('lose')
 		})
 	})
 
@@ -68,22 +68,16 @@ describe('StateMachine command methods modify state correctly or not when', () =
 			expect(stateMachine.state.getPlayerBagStatus().length).toEqual(2)
 			expect(response).toEqual('You picked GOLDEN EGG and put it in your bag.')
 		})
-		/*test('max three objects', () => {
-			stateMachine.parseUserCommand('MOVE SOUTH')
-			stateMachine.parseUserCommand('PICK GOLDEN CALICE')
-			stateMachine.parseUserCommand('MOVE NORTH')
-			stateMachine.parseUserCommand('MOVE EAST')
-			stateMachine.parseUserCommand('PICK GOLDEN EGG')
-			stateMachine.parseUserCommand('MOVE EAST')
-			stateMachine.parseUserCommand('PICK MIRROR SHIELD')
-			stateMachine.parseUserCommand('MOVE WEST')
-			stateMachine.parseUserCommand('MOVE SOUTH')
-			stateMachine.parseUserCommand('ATTACK')
-			stateMachine.parseUserCommand('MOVE SOUTH')
-			stateMachine.parseUserCommand('PICK DIRTY PROOF')
+		test('max three objects', () => {
+			stateMachine.state.objects.push(new Object('BELL BELL', null, 500000))
+			stateMachine.state.objects.push(new Object('CIAO BELL', null, 500000))
+			stateMachine.state.objects.push(new Object('ARRIVERDERCI BELL', null, 500000))
+			stateMachine.state.objects.push(new Object('ULTIMO BELL', 1, 500000))
+			expect(stateMachine.parseUserCommand('PICK ULTIMO BELL')).toEqual(
+				'Your bag is full you cannot pick up other objects.'
+			)
 			expect(stateMachine.state.getPlayerBagStatus().length).toEqual(3)
-			expect(stateMachine.state.getUserCommandReaction()).toEqual('Your bag is full you cannot pick up other objects.')
-		})*/
+		})
 	})
 	describe('drop command', () => {
 		test.each(['DROP', 'DROP '])('needs the name of an object as parameter', (command) => {
@@ -146,7 +140,7 @@ describe('StateMachine command methods modify state correctly or not when', () =
 		])('kills %s in room %i with %s', (monsterName, roomNumber, objectName, defeatMessage) => {
 			stateMachine.state.currentRoom = new Room(
 				roomNumber,
-				stateMachine.state.textLoader.roomsText[roomNumber - 1]
+				stateMachine.state.textLoader.texts.rooms[`${roomNumber}`]
 			)
 			stateMachine.state.objects.forEach((el) => (el.name === objectName ? (el.room = null) : null))
 
@@ -161,11 +155,11 @@ describe('StateMachine command methods modify state correctly or not when', () =
 		])('causes player death if right weapon is not in player bag', (roomNumber, ending) => {
 			stateMachine.state.currentRoom = new Room(
 				roomNumber,
-				stateMachine.state.textLoader.roomsText[4]
+				stateMachine.state.textLoader.texts.rooms[`${roomNumber}`]
 			)
 			expect(stateMachine.parseUserCommand('ATTACK')).toEqual(ending)
 			expect(stateMachine.state.isGameRunning).toEqual(false)
-			expect(stateMachine.state.endCause).toEqual('EndDead')
+			expect(stateMachine.state.endingReason).toEqual('dead')
 		})
 		test('does nothing if player is not in front of a monster', () => {
 			expect(stateMachine.parseUserCommand('ATTACK')).toEqual(
@@ -182,17 +176,20 @@ describe('StateMachine command methods modify state correctly or not when', () =
 	})
 	describe('exit command', () => {
 		test('exits app with win if in room 9', () => {
-			stateMachine.state.currentRoom = new Room(9, stateMachine.textLoader.roomsText[8])
+			stateMachine.state.currentRoom = new Room(
+				9,
+				stateMachine.state.textLoader.texts.rooms[`${9}`]
+			)
 			expect(stateMachine.parseUserCommand('EXIT')).toEqual(
 				'The princess beams with joy as she follows you, eager to put her horrible experience behind her.'
 			)
 			expect(stateMachine.state.isGameRunning).toEqual(false)
-			expect(stateMachine.state.endCause).toEqual('EndWin')
+			expect(stateMachine.state.endingReason).toEqual('win')
 		})
 		test('exits app with app over if not in room 9', () => {
 			expect(stateMachine.parseUserCommand('EXIT')).toEqual('Exiting the castle...')
 			expect(stateMachine.state.isGameRunning).toEqual(false)
-			expect(stateMachine.state.endCause).toEqual('EndLose')
+			expect(stateMachine.state.endingReason).toEqual('lose')
 		})
 	})
 })

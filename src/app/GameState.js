@@ -8,28 +8,12 @@ const HALF_MILION = ONE_MILION / 2
 module.exports = class GameState {
 	constructor(textLoader) {
 		this.textLoader = textLoader
-		this.objects = this.loadObjectsState()
-		this.monsters = this.loadMonstersState()
-		this.currentRoom = new Room(1, this.textLoader.roomsText[0])
+		//this will be demanded to a builder -> random config or reading from config file for objects monster and rooms
+		this.objects = this._loadObjectsState()
+		this.monsters = this._loadMonstersState()
+		this.currentRoom = new Room(1, this.textLoader.getTextByKey(`rooms.${1}`, {}, true))
 		this.isGameRunning = true
-		this.endCause = null
-	}
-
-	loadObjectsState() {
-		return [
-			new Object('GOLDEN EGG', 2, HALF_MILION),
-			new Object('MIRROR SHIELD', 3, 0),
-			new Object('GOLDEN CALICE', 4, HALF_MILION),
-			new Object('SILVER SWORD', 7, 0),
-			new Object('DUSTY PROOF', 8, ONE_MILION)
-		]
-	}
-
-	loadMonstersState() {
-		return [
-			new Monster('Medusa', 5, true, 'MIRROR SHIELD'),
-			new Monster('Dracula', 6, true, 'SILVER SWORD')
-		]
+		this.endingReason = null
 	}
 
 	getObjectsByRoom() {
@@ -52,8 +36,25 @@ module.exports = class GameState {
 		this.currentRoom = room
 	}
 
-	gameEndingFor(cause) {
+	setGameEnding(reason) {
 		this.isGameRunning = false
-		this.endCause = cause
+		this.endingReason = reason
+	}
+
+	_loadObjectsState() {
+		return [
+			new Object('GOLDEN EGG', 2, HALF_MILION),
+			new Object('MIRROR SHIELD', 3, 0),
+			new Object('GOLDEN CALICE', 4, HALF_MILION),
+			new Object('SILVER SWORD', 7, 0),
+			new Object('DUSTY PROOF', 8, ONE_MILION)
+		]
+	}
+
+	_loadMonstersState() {
+		return [
+			new Monster('Medusa', 5, true, 'MIRROR SHIELD'),
+			new Monster('Dracula', 6, true, 'SILVER SWORD')
+		]
 	}
 }

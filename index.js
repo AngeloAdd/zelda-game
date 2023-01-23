@@ -13,9 +13,9 @@ if (require.main === module) {
 	try {
 		main(new TextLoader(), new Logger(), new Prompt())
 			.then((code) => process.exit(code))
-			.catch((asyncError) => console.error(asyncError))
+			.catch((asyncError) => console.error('main: ', asyncError))
 	} catch (syncError) {
-		console.error(syncError)
+		console.error('syncMain:', syncError)
 		process.exit(1)
 	}
 }

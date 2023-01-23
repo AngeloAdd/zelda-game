@@ -5,8 +5,6 @@ const BASE_COMMANDS = ['move', 'look', 'attack', 'drop', 'pick', 'exit']
 module.exports = class StateMachine {
 	constructor(state) {
 		this.state = state
-
-		this.textLoader = this.state.textLoader
 	}
 
 	parseUserCommand(playerCommand) {
@@ -64,7 +62,7 @@ module.exports = class StateMachine {
 	moveWithDirection(direction) {
 		const room = this.state.getRoomInfo()
 
-		if (!direction || !room.roomExits.includes(direction)) {
+		if (!direction || !room.roomExitsList.includes(direction)) {
 			return 'Invalid direction!'
 		}
 
@@ -75,7 +73,7 @@ module.exports = class StateMachine {
 		const roomNumber = room.roomNumber
 
 		if (roomNumber === 1 && direction === 'west') {
-			this.state.gameEndingFor('EndLose')
+			this.state.setGameEnding('lose')
 			return null
 		}
 
@@ -87,7 +85,12 @@ module.exports = class StateMachine {
 		}
 
 		let newRoomNumber = roomNumber + directionMapToRoomNumberIncrement[direction]
-		this.state.setRoom(new Room(newRoomNumber, this.textLoader.roomsText[newRoomNumber - 1]))
+		this.state.setRoom(
+			new Room(
+				newRoomNumber,
+				this.state.textLoader.getTextByKey(`rooms.${newRoomNumber}`, {}, true)
+			)
+		)
 		return `Moving ${direction.toUpperCase()}`
 	}
 
@@ -124,7 +127,7 @@ module.exports = class StateMachine {
 		let reaction = ''
 
 		if (!this.state.getPlayerBagStatus().some((el) => el.name === monsterByRoom.weakness)) {
-			this.state.gameEndingFor('EndDead')
+			this.state.setGameEnding('dead')
 			return monsterByRoom.name === 'Dracula'
 				? 'Dracula drains you of your blood while you helplessly struggle to hurt him.'
 				: "Medusa's gaze turns you to stone as you foolishly attack her."
@@ -146,10 +149,10 @@ module.exports = class StateMachine {
 
 	exit() {
 		if (this.state.currentRoom.roomNumber === 9) {
-			this.state.gameEndingFor('EndWin')
+			this.state.setGameEnding('win')
 			return 'The princess beams with joy as she follows you, eager to put her horrible experience behind her.'
 		} else {
-			this.state.gameEndingFor('EndLose')
+			this.state.setGameEnding('lose')
 			return 'Exiting the castle...'
 		}
 	}

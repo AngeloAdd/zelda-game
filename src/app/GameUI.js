@@ -50,8 +50,8 @@ class GameUI {
 	_displayGameStatus() {
 		let roomInfo = this.gameState.getRoomInfo()
 
-		this.logger.printWithColors(roomInfo.roomDescription[0], 'red')
-		this.logger.printWithColors(roomInfo.roomDescription[1], 'cyan')
+		this.logger.printWithColors(roomInfo.roomDescription, 'red')
+		this.logger.printWithColors(roomInfo.roomExitsText, 'cyan')
 
 		let monsterByRoom = this.gameState.getMonsterByRoom()
 		if (monsterByRoom) {
@@ -93,7 +93,10 @@ class GameUI {
 	}
 
 	_displayEndGameMessage() {
-		this.logger.printWithColors(this.textLoader.getByEndCause(this.gameState.endCause), 'magenta')
+		this.logger.printWithColors(
+			this.textLoader.getTextByKey(this.gameState.endingReason),
+			'magenta'
+		)
 	}
 
 	async _askPlayerName() {
