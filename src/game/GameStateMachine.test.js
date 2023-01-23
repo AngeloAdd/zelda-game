@@ -16,8 +16,7 @@ afterEach(() => {
 describe('StateMachine command methods modify state correctly or not when', () => {
 	describe('move command', () => {
 		test.each(['MOVE S', 'MOVE', 'MOVE ', 'MOVE NORTH'])('returns invalid message', (command) => {
-			stateMachine.parseUserCommand(command)
-			expect(stateMachine.state.getUserCommandReaction()).toEqual('Invalid direction!')
+			expect(stateMachine.parseUserCommand(command)).toEqual('Invalid direction!')
 		})
 		test('can make player between rooms', () => {
 			expect(stateMachine.state.currentRoom.roomNumber).toEqual(1)
@@ -41,38 +40,32 @@ describe('StateMachine command methods modify state correctly or not when', () =
 
 	describe('pick command', () => {
 		test.each(['PICK', 'PICK '])('needs the name of an object as parameter', (command) => {
-			stateMachine.parseUserCommand(command)
+			expect(stateMachine.parseUserCommand(command)).toEqual('You should specify an object.')
 			expect(stateMachine.state.getPlayerBagStatus().length).toEqual(0)
-			expect(stateMachine.state.getUserCommandReaction()).toEqual('You should specify an object.')
 		})
 		test('allows player to pick nothing if room is empty', () => {
-			stateMachine.parseUserCommand('PICK GOLDEN CALICE')
+			const response = stateMachine.parseUserCommand('PICK GOLDEN CALICE')
 			expect(stateMachine.state.getPlayerBagStatus().length).toEqual(0)
-			expect(stateMachine.state.getUserCommandReaction()).toEqual(
-				'There is no such object in this room to pick up.'
-			)
+			expect(response).toEqual('There is no such object in this room to pick up.')
 		})
 		test('allows player to pick one object', () => {
 			stateMachine.parseUserCommand('MOVE SOUTH')
 			expect(stateMachine.state.getObjectsByRoom().length).toEqual(1)
 			expect(stateMachine.state.getPlayerBagStatus().length).toEqual(0)
-			stateMachine.parseUserCommand('PICK GOLDEN CALICE')
+			const response = stateMachine.parseUserCommand('PICK GOLDEN CALICE')
 			expect(stateMachine.state.getObjectsByRoom().length).toEqual(0)
 			expect(stateMachine.state.getPlayerBagStatus().length).toEqual(1)
-			expect(stateMachine.state.getUserCommandReaction()).toEqual(
-				'You picked GOLDEN CALICE and put it in your bag.'
-			)
+			expect(response).toEqual('You picked GOLDEN CALICE and put it in your bag.')
 		})
 		test('allows player pick multiple objects', () => {
+			let response
 			;['MOVE SOUTH', 'PICK GOLDEN CALICE', 'MOVE NORTH', 'MOVE EAST', 'PICK GOLDEN EGG'].forEach(
 				(el) => {
-					stateMachine.parseUserCommand(el)
+					response = stateMachine.parseUserCommand(el)
 				}
 			)
 			expect(stateMachine.state.getPlayerBagStatus().length).toEqual(2)
-			expect(stateMachine.state.getUserCommandReaction()).toEqual(
-				'You picked GOLDEN EGG and put it in your bag.'
-			)
+			expect(response).toEqual('You picked GOLDEN EGG and put it in your bag.')
 		})
 		/*test('max three objects', () => {
 			stateMachine.parseUserCommand('MOVE SOUTH')
@@ -93,24 +86,21 @@ describe('StateMachine command methods modify state correctly or not when', () =
 	})
 	describe('drop command', () => {
 		test.each(['DROP', 'DROP '])('needs the name of an object as parameter', (command) => {
-			stateMachine.parseUserCommand(command)
+			expect(stateMachine.parseUserCommand(command)).toEqual('You should specify an object.')
 			expect(stateMachine.state.getPlayerBagStatus().length).toEqual(0)
-			expect(stateMachine.state.getUserCommandReaction()).toEqual('You should specify an object.')
 		})
 		test('allows player to drop nothing if player bags is empty', () => {
-			stateMachine.parseUserCommand('DROP GOLDEN CALICE')
-			expect(stateMachine.state.getObjectsByRoom().length).toEqual(0)
-			expect(stateMachine.state.getUserCommandReaction()).toEqual(
+			expect(stateMachine.parseUserCommand('DROP GOLDEN CALICE')).toEqual(
 				'There is no such object in your bag.'
 			)
+			expect(stateMachine.state.getObjectsByRoom().length).toEqual(0)
 		})
 		test('allows player to drop one object', () => {
 			stateMachine.state.objects.push(new Object('BELL BELL', null, 500000))
-			stateMachine.parseUserCommand('DROP BELL BELL')
-			expect(stateMachine.state.getObjectsByRoom().length).toEqual(1)
-			expect(stateMachine.state.getUserCommandReaction()).toEqual(
+			expect(stateMachine.parseUserCommand('DROP BELL BELL')).toEqual(
 				'You dropped BELL BELL in room number 1'
 			)
+			expect(stateMachine.state.getObjectsByRoom().length).toEqual(1)
 		})
 		test('allows player drop multiple objects', () => {
 			;[
@@ -131,11 +121,10 @@ describe('StateMachine command methods modify state correctly or not when', () =
 			expect(stateMachine.state.getObjectsByRoom().length).toEqual(5)
 			stateMachine.state.objects.push(new Object('BELL BELL', null, 500000))
 			expect(stateMachine.state.getPlayerBagStatus().length).toEqual(1)
-			stateMachine.parseUserCommand('DROP BELL BELL')
-			expect(stateMachine.state.getPlayerBagStatus().length).toEqual(1)
-			expect(stateMachine.state.getUserCommandReaction()).toEqual(
+			expect(stateMachine.parseUserCommand('DROP BELL BELL')).toEqual(
 				'The room is full, you can not drop any object'
 			)
+			expect(stateMachine.state.getPlayerBagStatus().length).toEqual(1)
 		})
 	})
 
@@ -160,11 +149,10 @@ describe('StateMachine command methods modify state correctly or not when', () =
 			)
 			stateMachine.state.objects.forEach((el) => (el.name === objectName ? (el.room = null) : null))
 
-			stateMachine.parseUserCommand('ATTACK')
+			expect(stateMachine.parseUserCommand('ATTACK')).toEqual(defeatMessage)
 			expect(stateMachine.state.monsters.filter((el) => el.name === monsterName)[0].alive).toBe(
 				false
 			)
-			expect(stateMachine.state.userCommandReaction).toEqual(defeatMessage)
 		})
 		test.each([
 			[5, "Medusa's gaze turns you to stone as you foolishly attack her."],
@@ -174,22 +162,19 @@ describe('StateMachine command methods modify state correctly or not when', () =
 				roomNumber,
 				stateMachine.state.textLoader.roomsText[4]
 			)
-			stateMachine.parseUserCommand('ATTACK')
+			expect(stateMachine.parseUserCommand('ATTACK')).toEqual(ending)
 			expect(stateMachine.state.isGameRunning).toEqual(false)
 			expect(stateMachine.state.endCause).toEqual('EndDead')
-			expect(stateMachine.state.userCommandReaction).toEqual(ending)
 		})
 		test('does nothing if player is not in front of a monster', () => {
-			stateMachine.parseUserCommand('ATTACK')
-			expect(stateMachine.state.userCommandReaction).toEqual(
+			expect(stateMachine.parseUserCommand('ATTACK')).toEqual(
 				'You start moving your arms in the air. Are you ok?'
 			)
 		})
 	})
 	describe('look command', () => {
 		test('does nothing', () => {
-			stateMachine.parseUserCommand('LOOK')
-			expect(stateMachine.state.userCommandReaction).toEqual(
+			expect(stateMachine.parseUserCommand('LOOK')).toEqual(
 				"You cautiously scan the room, feeling as if the room's eerie presence is staring at you in return."
 			)
 		})
@@ -197,16 +182,14 @@ describe('StateMachine command methods modify state correctly or not when', () =
 	describe('exit command', () => {
 		test('exits game with win if in room 9', () => {
 			stateMachine.state.currentRoom = new Room(9, stateMachine.textLoader.roomsText[8])
-			stateMachine.parseUserCommand('EXIT')
-			expect(stateMachine.state.userCommandReaction).toEqual(
+			expect(stateMachine.parseUserCommand('EXIT')).toEqual(
 				'The princess beams with joy as she follows you, eager to put her horrible experience behind her.'
 			)
 			expect(stateMachine.state.isGameRunning).toEqual(false)
 			expect(stateMachine.state.endCause).toEqual('EndWin')
 		})
 		test('exits game with game over if not in room 9', () => {
-			stateMachine.parseUserCommand('EXIT')
-			expect(stateMachine.state.userCommandReaction).toEqual('Exiting the castle...')
+			expect(stateMachine.parseUserCommand('EXIT')).toEqual('Exiting the castle...')
 			expect(stateMachine.state.isGameRunning).toEqual(false)
 			expect(stateMachine.state.endCause).toEqual('EndLose')
 		})

@@ -7,46 +7,30 @@ module.exports = class StateMachine {
 		this.textLoader = textLoader
 	}
 
-	updatePlayerName(playerName) {
-		this.state.setPlayerName(playerName)
-	}
-
 	parseUserCommand(playerCommand) {
-		this.state.resetPreviousReaction()
 		const fullCommand = playerCommand.toLowerCase().trim()
 		let baseCommand = BASE_COMMANDS.filter((el) => fullCommand.includes(el))[0]
 
-		this.updateState(baseCommand, fullCommand)
+		return this.updateState(baseCommand, fullCommand)
 	}
 
 	updateState(baseCommand, fullCommand) {
-		let reaction = null
 		switch (baseCommand) {
 			case 'move':
-				reaction = this.moveToRoom(this.getParam(fullCommand, baseCommand))
-				break
+				return this.moveWithDirection(this.getParam(fullCommand, baseCommand))
 			case 'pick':
-				reaction = this.pickObject(this.getParam(fullCommand, baseCommand).toUpperCase())
-				break
+				return this.pickObject(this.getParam(fullCommand, baseCommand).toUpperCase())
 			case 'drop':
-				reaction = this.dropObject(this.getParam(fullCommand, baseCommand).toUpperCase())
-				break
+				return this.dropObject(this.getParam(fullCommand, baseCommand).toUpperCase())
 			case 'attack':
-				reaction = this.tryAttack()
-				break
+				return this.attack()
 			case 'exit':
-				reaction = this.exit()
-				break
+				return this.exit()
 			case 'look':
-				reaction =
-					"You cautiously scan the room, feeling as if the room's eerie presence is staring at you in return."
-				break
+				return this.look()
 			default:
-				reaction = 'Invalid command'
-				break
+				return 'Invalid command'
 		}
-
-		return this.state.setUserCommandReaction(reaction)
 	}
 
 	getParam(fullCommand, baseCommand) {
@@ -75,7 +59,7 @@ module.exports = class StateMachine {
 		return `You picked ${objectName} and put it in your bag.`
 	}
 
-	moveToRoom(direction) {
+	moveWithDirection(direction) {
 		const room = this.state.getRoomInfo()
 
 		if (!direction || !room.roomExits.includes(direction)) {
@@ -128,12 +112,15 @@ module.exports = class StateMachine {
 		return `You dropped ${objectName} in room number ${this.state.currentRoom.roomNumber}`
 	}
 
-	tryAttack() {
+	attack() {
 		let monsterByRoom = this.state.getMonsterByRoom()
+
 		if (!monsterByRoom) {
 			return 'You start moving your arms in the air. Are you ok?'
 		}
+
 		let reaction = ''
+
 		if (!this.state.getPlayerBagStatus().some((el) => el.name === monsterByRoom.weakness)) {
 			this.state.gameEndingFor('EndDead')
 			return monsterByRoom.name === 'Dracula'
@@ -160,5 +147,9 @@ module.exports = class StateMachine {
 			this.state.gameEndingFor('EndLose')
 			return 'Exiting the castle...'
 		}
+	}
+
+	look() {
+		return "You cautiously scan the room, feeling as if the room's eerie presence is staring at you in return."
 	}
 }

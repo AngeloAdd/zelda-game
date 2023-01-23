@@ -68,26 +68,4 @@ module.exports = class GameState {
 		this.isGameRunning = false
 		this.endCause = cause
 	}
-
-	setPlayerName(playerName) {
-		this.playerName = playerName
-	}
-
-	getPlayerName() {
-		return this.playerName ?? null
-	}
-
-	getUserCommandReaction() {
-		return this.userCommandReaction
-	}
-
-	setUserCommandReaction(reaction) {
-		this.userCommandReaction = reaction
-
-		return this
-	}
-
-	resetPreviousReaction() {
-		return (this.userCommandReaction = null)
-	}
 }
