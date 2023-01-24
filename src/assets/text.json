@@ -28,5 +28,41 @@
 		"alive": "Dracula, the immortal vampire, stands guard at a locked door, his piercing gaze daring anyone to try and enter.",
 		"dead": "A small pile of ash and dust lies on the floor, the remnants of a once powerful being."
 	},
-	"cashStatus": "Current cash: ##amount##"
+	"cashStatus": "Current cash: ##amount##",
+	"commands": {
+		"invalid": "Invalid command. You can use LOOK, ATTACK, PICK, DROP, MOVE, EXIT!",
+		"move": {
+			"invalid": "Invalid direction!",
+			"closed": "The door is protected by the monster",
+			"success": "Moving ##direction##..."
+		},
+		"look": "You cautiously scan the room, feeling as if the room's eerie presence is staring at you in return.",
+		"exit": {
+			"lose": "Exiting the castle...",
+			"win": "The princess beams with joy as she follows you, eager to put her horrible experience behind her."
+		},
+		"attack": {
+			"null": "You start moving your arms in the air. Are you ok?",
+			"defeat": {
+				"medusa": "Medusa's gaze turns you to stone as you foolishly attack her.",
+				"dracula": "Dracula drains you of your blood while you helplessly struggle to hurt him."
+			},
+			"win": {
+				"medusa": "Medusa's eyes widen in horror as she realizes that her curse has now been turned against her.",
+				"dracula": "The powerful vampire exudes an eerie silence as his body slowly disintegrates into dust."
+			}
+		},
+		"drop": {
+			"full": "The room is full, you can not drop any object",
+			"miss": "There is no such object in your bag.",
+			"param": "You should specify an object.",
+			"success": "You dropped ##objectName## in room number ##roomNumber##}"
+		},
+		"pick": {
+			"full": "Your bag is full you cannot pick up other objects.",
+			"miss": "There is no such object in this room to pick up.",
+			"param": "You should specify an object.",
+			"success": "You picked ##objectName## and put it in your bag."
+		}
+	}
 }

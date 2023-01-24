@@ -10,7 +10,7 @@ module.exports = class GameUI {
 		try {
 			this._displayStartingMessage()
 			const playerName = await this._askPlayerName()
-			this._displayGameResponse(this.textLoader.getTextByKey('player.nameResponse', { playerName }))
+			this._displayGameResponse(['player.nameResponse', { playerName }])
 			return this._handlePlayerCommand()
 		} catch (e) {
 			console.error(e)
@@ -41,7 +41,7 @@ module.exports = class GameUI {
 
 	_displayGameResponse(response) {
 		this.logger.printNewLine()
-		this.logger.printWithColors(response, 'magenta', '', 'bright')
+		this.logger.printWithColors(this.textLoader.getTextByKey(...response), 'magenta', '', 'bright')
 		this.logger.printNewLine()
 	}
 

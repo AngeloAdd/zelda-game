@@ -36,7 +36,7 @@ module.exports = class Game {
 			case 'look':
 				return this._look()
 			default:
-				return 'Invalid command. You can use LOOK, ATTACK, PICK, DROP, MOVE, EXIT!'
+				return ['commands.invalid']
 		}
 	}
 
@@ -51,31 +51,31 @@ module.exports = class Game {
 
 	_pickObject(objectName) {
 		if (!objectName) {
-			return 'You should specify an object.'
+			return ['commands.pick.param']
 		}
 		let objectsByRoom = this.state.getObjectsInCurrentRoom()
 		if (!objectsByRoom.some((el) => el.name === objectName)) {
-			return 'There is no such object in this room to pick up.'
+			return ['commands.pick.miss']
 		}
 
 		if (this.state.getObjectsInPlayerBag().length === 3) {
-			return 'Your bag is full you cannot pick up other objects.'
+			return ['commands.pick.full']
 		}
 
 		this.state.pickObject(objectName)
 
-		return `You picked ${objectName} and put it in your bag.`
+		return ['commands.pick.success', { objectName }]
 	}
 
 	_moveWithDirection(direction) {
 		const room = this.state.getCurrentRoom()
 
 		if (!direction || !room.hasExit(direction)) {
-			return 'Invalid direction!'
+			return ['commands.move.invalid']
 		}
 
 		if ('south' === direction && this.state.getMonsterInCurrentRoom()?.alive) {
-			return 'The door is protected by the monster'
+			return ['commands.move.closed']
 		}
 
 		if (room.isFirst() && direction === 'west') {
@@ -86,60 +86,56 @@ module.exports = class Game {
 		let newRoomNumber = room.roomNumber + MAP_DIRECTION_TO_ROOM_INCREMENT[direction]
 		this.state.setCurrentRoomByNumber(newRoomNumber)
 
-		return `Moving ${direction.toUpperCase()}`
+		return ['commands.move.success', { direction: direction.toUpperCase() }]
 	}
 
 	_dropObject(objectName) {
 		if (!objectName) {
-			return 'You should specify an object.'
+			return ['commands.drop.param']
 		}
 
 		let objectsInBag = this.state.getObjectsInPlayerBag()
 		if (!objectsInBag.some((el) => el.name === objectName)) {
-			return 'There is no such object in your bag.'
+			return ['commands.drop.miss']
 		}
 
 		if (this.state.getObjectsInCurrentRoom().length === 5) {
-			return 'The room is full, you can not drop any object'
+			return ['commands.drop.full']
 		}
 
 		this.state.dropObject(objectName)
 
-		return `You dropped ${objectName} in room number ${this.state.getCurrentRoom().roomNumber}`
+		return ['commands.drop.success', { objectName }]
 	}
 
 	_attack() {
 		let monsterByRoom = this.state.getMonsterInCurrentRoom()
 
 		if (!monsterByRoom) {
-			return 'You start moving your arms in the air. Are you ok?'
+			return ['commands.attack.null']
 		}
 
 		if (!this.state.getObjectsInPlayerBag().some((el) => el.name === monsterByRoom.weakness)) {
 			this.state.setGameEnding('dead')
-			return monsterByRoom.name === 'Dracula'
-				? 'Dracula drains you of your blood while you helplessly struggle to hurt him.'
-				: "Medusa's gaze turns you to stone as you foolishly attack her."
+			return ['commands.attack.defeat.' + monsterByRoom.name.toLowerCase()]
 		}
 
 		this.state.killMonster(monsterByRoom.name)
 
-		return monsterByRoom.name === 'Dracula'
-			? 'The powerful vampire exudes an eerie silence as his body slowly disintegrates into dust.'
-			: "Medusa's eyes widen in horror as she realizes that her curse has now been turned against her."
+		return ['commands.attack.success.' + monsterByRoom.name.toLowerCase()]
 	}
 
 	_exit() {
 		if (this.state.getCurrentRoom().isLast()) {
 			this.state.setGameEnding('win')
-			return 'The princess beams with joy as she follows you, eager to put her horrible experience behind her.'
+			return ['commands.exit.win']
 		} else {
 			this.state.setGameEnding('lose')
-			return 'Exiting the castle...'
+			return ['commands.exit.lose']
 		}
 	}
 
 	_look() {
-		return "You cautiously scan the room, feeling as if the room's eerie presence is staring at you in return."
+		return ['commands.look']
 	}
 }
