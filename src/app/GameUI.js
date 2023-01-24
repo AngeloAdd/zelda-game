@@ -1,3 +1,4 @@
+const PlayerCommand = require('./utils/PlayerCommand')
 module.exports = class GameUI {
 	constructor(game, loader, logger, prompt) {
 		this.game = game
@@ -25,7 +26,7 @@ module.exports = class GameUI {
 	async _handlePlayerCommand() {
 		this._displayStatus()
 		const playerCommand = await this._askPlayerNextCommand()
-		const response = this.game.parseUserCommand(playerCommand)
+		const response = this.game.parseUserCommand(new PlayerCommand(playerCommand))
 
 		if (response) {
 			this._displayGameResponse(response)

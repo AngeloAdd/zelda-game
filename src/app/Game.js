@@ -1,4 +1,3 @@
-const BASE_COMMANDS = ['move', 'look', 'attack', 'drop', 'pick', 'exit']
 const MAP_DIRECTION_TO_ROOM_INCREMENT = {
 	south: 3,
 	north: -3,
@@ -12,23 +11,13 @@ module.exports = class Game {
 	}
 
 	parseUserCommand(playerCommand) {
-		const fullCommand = playerCommand.toLowerCase().trim()
-		const baseCommand = BASE_COMMANDS.filter(
-			(el) => fullCommand.split(' ').filter((com) => com === el)[0]
-		)[0]
-		const param = this._getParam(fullCommand, baseCommand)
-
-		return this._updateState(baseCommand, param)
-	}
-
-	_updateState(baseCommand, param) {
-		switch (baseCommand) {
+		switch (playerCommand.command()) {
 			case 'move':
-				return this._moveWithDirection(param)
+				return this._moveWithDirection(playerCommand.parameter())
 			case 'pick':
-				return this._pickObject(param.toUpperCase())
+				return this._pickObject(playerCommand.parameter().toUpperCase())
 			case 'drop':
-				return this._dropObject(param.toUpperCase())
+				return this._dropObject(playerCommand.parameter().toUpperCase())
 			case 'attack':
 				return this._attack()
 			case 'exit':
@@ -38,15 +27,6 @@ module.exports = class Game {
 			default:
 				return ['commands.invalid']
 		}
-	}
-
-	_getParam(fullCommand, baseCommand) {
-		const param = fullCommand
-			.split(' ')
-			.filter((el) => !el.includes(baseCommand))
-			.join(' ')
-			.trim()
-		return param.includes(baseCommand) ? null : param
 	}
 
 	_pickObject(objectName) {
