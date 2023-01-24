@@ -1,35 +1,9 @@
-##ROOM##
 Currently you are in Room 1, the dark foyer. The dimly lit room is adorned with eerie statues and ominous tapestries, setting the tone for the rest of the castle.
-The Exit to the castle is to your West, there is a room to your East, there is a room to your South.
-
-##ROOM##
 Currently you are in Room 2, the throne room of the dark lord. This is where the wizard holds court and receives visitors, seated upon a black throne. The room is decorated with dark symbols and banners.
-There is a room to your West, there is a room to your East, there is a room to your South.
-
-##ROOM##
 Currently you are in Room 3, the prison cells. This is where the wizard imprisons his enemies and those who dare to oppose him. The cells are damp and dark, and the sound of tortured screams can be heard echoing through the halls.
-There is a room to your West.
-
-##ROOM##
 Currently you are in Room 4, the potion room. This room is where the wizard concocts his deadly brews and elixirs. The room is filled with strange ingredients and bubbling cauldrons.
-There is a room to your North.
-
-##ROOM##
 Currently you are in Room 5, the library of dark magic. This room is filled with ancient tomes of forbidden knowledge and dark incantations. The room is dimly lit and has an eerie feeling about it.
-There is a room to your North, there is a room to your East, there is a room to your South.
-
-##ROOM##
 Currently you are in Room 6, the portal room. This is where the wizard opens portals to other worlds and dimensions to summon dark creatures to do his bidding. The room is filled with arcane symbols and strange energy.
-There is a room to your West, there is a room to your South.
-
-##ROOM##
 Currently you are in Room 7, the armory of the dark army. This room is filled with weapons of dark magic, ready for the wizard's army to use in battle. The room is dark and ominous, with a sense of deadly power.
-There is a room to your East.
-
-##ROOM##
 Currently you are in Room 8, the wizard's study. This room is filled with shelves of ancient books and potions, and a large desk where the evil wizard conducts his dark experiments.
-There is a room to your North, there is a room to your West.
-
-##ROOM##
 Currently you are in Room 9, the ritual chamber. This room is used for dark rituals and sacrifices to the wizard's dark powers. The room is adorned with symbols of death and destruction.
-There is a room to your North.

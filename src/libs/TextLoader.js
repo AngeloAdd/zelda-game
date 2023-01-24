@@ -11,21 +11,22 @@ module.exports = class TextLoader {
 		const keyRecursive = key.split('.')
 		let textFromJson = this.texts
 
-		for (let i = 0; i < keyRecursive.length; i++) {
-			textFromJson = textFromJson[keyRecursive[i]]
-			if (i === keyRecursive.length - 1) {
-				break
+		try {
+			for (let i = 0; i < keyRecursive.length; i++) {
+				textFromJson = textFromJson[keyRecursive[i]]
+				if (i === keyRecursive.length - 1) {
+					break
+				}
 			}
+		} catch (e) {
+			console.log(e)
+			textFromJson = 'placeholder could not retrieve for: ' + e
 		}
 
 		if (substitution && typeof substitution === 'object') {
 			for (const sub in substitution) {
 				textFromJson = textFromJson.replace(`##${sub}##`, substitution[sub])
 			}
-		}
-
-		if (!(typeof textFromJson === 'string')) {
-			throw new Error('No text available under this key')
 		}
 
 		return textFromJson
@@ -38,18 +39,11 @@ module.exports = class TextLoader {
 		this.texts.lose = this._readTxt('EndLose')
 		this.texts.win = this._readTxt('EndWin')
 
-		this.texts.rooms = {}
+		this.texts.rooms = []
 		this._readTxt('Rooms')
-			.split('##ROOM##')
+			.split('\n')
 			.filter((el) => el !== '')
-			.map((el, i) => {
-				let text = el.trim().split('\n')
-
-				this.texts.rooms[`${i + 1}`] = {
-					description: text[0],
-					exits: text[1]
-				}
-			})
+			.map((el) => this.texts.rooms.push(el.trim()))
 	}
 
 	_readTxt(filename) {

@@ -50,12 +50,12 @@ module.exports = class Game {
 		if (!objectName) {
 			return 'You should specify an object.'
 		}
-		let objectsByRoom = this.state.getObjectsByRoom()
+		let objectsByRoom = this.state.getObjectsInCurrentRoom()
 		if (!objectsByRoom.some((el) => el.name === objectName)) {
 			return 'There is no such object in this room to pick up.'
 		}
 
-		if (this.state.getPlayerBagStatus().length === 3) {
+		if (this.state.getObjectsInPlayerBag().length === 3) {
 			return 'Your bag is full you cannot pick up other objects.'
 		}
 
@@ -65,23 +65,23 @@ module.exports = class Game {
 	}
 
 	_moveWithDirection(direction) {
-		const room = this.state.getRoomInfo()
+		const room = this.state.getCurrentRoom()
 
 		if (!direction || !room.hasExit(direction)) {
 			return 'Invalid direction!'
 		}
 
-		if ('south' === direction && this.state.getMonsterByRoom()?.alive) {
+		if ('south' === direction && this.state.getMonsterInCurrentRoom()?.alive) {
 			return 'The door is protected by the monster'
 		}
 
-		if (room.roomNumber === 1 && direction === 'west') {
+		if (room.isFirst() && direction === 'west') {
 			this.state.setGameEnding('lose')
 			return null
 		}
 
 		let newRoomNumber = room.roomNumber + MAP_DIRECTION_TO_ROOM_INCREMENT[direction]
-		this.state.setRoomByNumber(newRoomNumber)
+		this.state.setCurrentRoomByNumber(newRoomNumber)
 
 		return `Moving ${direction.toUpperCase()}`
 	}
@@ -91,28 +91,28 @@ module.exports = class Game {
 			return 'You should specify an object.'
 		}
 
-		let objectsInBag = this.state.getPlayerBagStatus()
+		let objectsInBag = this.state.getObjectsInPlayerBag()
 		if (!objectsInBag.some((el) => el.name === objectName)) {
 			return 'There is no such object in your bag.'
 		}
 
-		if (this.state.getObjectsByRoom().length === 5) {
+		if (this.state.getObjectsInCurrentRoom().length === 5) {
 			return 'The room is full, you can not drop any object'
 		}
 
 		this.state.dropObject(objectName)
 
-		return `You dropped ${objectName} in room number ${this.state.currentRoom.roomNumber}`
+		return `You dropped ${objectName} in room number ${this.state.getCurrentRoom().roomNumber}`
 	}
 
 	_attack() {
-		let monsterByRoom = this.state.getMonsterByRoom()
+		let monsterByRoom = this.state.getMonsterInCurrentRoom()
 
 		if (!monsterByRoom) {
 			return 'You start moving your arms in the air. Are you ok?'
 		}
 
-		if (!this.state.getPlayerBagStatus().some((el) => el.name === monsterByRoom.weakness)) {
+		if (!this.state.getObjectsInPlayerBag().some((el) => el.name === monsterByRoom.weakness)) {
 			this.state.setGameEnding('dead')
 			return monsterByRoom.name === 'Dracula'
 				? 'Dracula drains you of your blood while you helplessly struggle to hurt him.'
@@ -127,7 +127,7 @@ module.exports = class Game {
 	}
 
 	_exit() {
-		if (this.state.currentRoom.roomNumber === 9) {
+		if (this.state.getCurrentRoom().isLast()) {
 			this.state.setGameEnding('win')
 			return 'The princess beams with joy as she follows you, eager to put her horrible experience behind her.'
 		} else {

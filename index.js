@@ -4,9 +4,10 @@ const GameState = require('./src/app/GameState')
 const Logger = require('./src/libs/Logger')
 const Prompt = require('./src/libs/Prompt')
 const TextLoader = require('./src/libs/TextLoader')
+const config = require('./src/libs/Config')
 
 async function main(loader, logger, prompt) {
-	return new GameUI(new Game(new GameState(loader.texts.rooms)), loader, logger, prompt).initUI()
+	return new GameUI(new Game(new GameState(config)), loader, logger, prompt).initUI()
 }
 
 if (require.main === module) {

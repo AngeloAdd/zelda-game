@@ -1,4 +1,4 @@
-class GameUI {
+module.exports = class GameUI {
 	constructor(game, loader, logger, prompt) {
 		this.game = game
 		this.textLoader = loader
@@ -46,33 +46,43 @@ class GameUI {
 	}
 
 	_displayStatus() {
-		let roomInfo = this.game.state.getRoomInfo()
+		let roomInfo = this.game.state.getCurrentRoom()
 
 		this.logger.printWithColors(
-			this.textLoader.getTextByKey(`rooms.${roomInfo.roomNumber}.description`),
+			this.textLoader.getTextByKey(`rooms.${roomInfo.roomNumber - 1}`),
 			'red'
 		)
-		this.logger.printWithColors(roomInfo.roomExits, 'cyan')
 
-		let monsterByRoom = this.game.state.getMonsterByRoom()
+		let roomExit = []
+		roomInfo.roomExits.forEach((el) => {
+			if (roomInfo.isFirst() && el === 'West') {
+				roomExit.push('the exit to the castle is to your West')
+			} else {
+				roomExit.push(`there is a room to your ${el}`)
+			}
+		})
+		let exits = roomExit.join(', ')
+		this.logger.printWithColors(`${exits[0].toUpperCase()}${exits.slice(1)}.`, 'cyan')
+
+		let monsterByRoom = this.game.state.getMonsterInCurrentRoom()
 		if (monsterByRoom) {
 			let textToPrint = monsterByRoom.name.toLowerCase() + '.'
 			textToPrint += monsterByRoom.alive ? 'alive' : 'dead'
 			this.logger.printWithColors(this.textLoader.getTextByKey(textToPrint), 'blue')
 		}
 
-		this.game.state.getObjectsByRoom().forEach((el) => {
+		this.game.state.getObjectsInCurrentRoom().forEach((el) => {
 			this.logger.printWithColors(
 				this.textLoader.getTextByKey('object.laying', { objectName: el.name }),
 				'yellow'
 			)
 		})
 
-		if (roomInfo.roomNumber === 9) {
+		if (roomInfo.isLast()) {
 			this.logger.printWithColors(this.textLoader.getTextByKey('princess.waiting'), 'blue')
 		}
 
-		let playerBagStatus = this.game.state.getPlayerBagStatus()
+		let playerBagStatus = this.game.state.getObjectsInPlayerBag()
 		this.logger.printWithColors(
 			this.textLoader.getTextByKey('bag.capacity', {
 				itemsNumber: playerBagStatus.length,
@@ -104,5 +114,3 @@ class GameUI {
 		return this.prompt.ask(this.textLoader.getTextByKey('player.nameQuestion'))
 	}
 }
-
-module.exports = GameUI
