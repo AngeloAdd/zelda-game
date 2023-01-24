@@ -13,7 +13,9 @@ module.exports = class Game {
 
 	parseUserCommand(playerCommand) {
 		const fullCommand = playerCommand.toLowerCase().trim()
-		const baseCommand = BASE_COMMANDS.filter((el) => fullCommand.includes(el))[0]
+		const baseCommand = BASE_COMMANDS.filter(
+			(el) => fullCommand.split(' ').filter((com) => com === el)[0]
+		)[0]
 		const param = this._getParam(fullCommand, baseCommand)
 
 		return this._updateState(baseCommand, param)
@@ -34,16 +36,17 @@ module.exports = class Game {
 			case 'look':
 				return this._look()
 			default:
-				return 'Invalid command'
+				return 'Invalid command. You can use LOOK, ATTACK, PICK, DROP, MOVE, EXIT!'
 		}
 	}
 
 	_getParam(fullCommand, baseCommand) {
-		return fullCommand
+		const param = fullCommand
 			.split(' ')
 			.filter((el) => !el.includes(baseCommand))
 			.join(' ')
 			.trim()
+		return param.includes(baseCommand) ? null : param
 	}
 
 	_pickObject(objectName) {
