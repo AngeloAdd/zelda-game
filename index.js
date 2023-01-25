@@ -4,7 +4,17 @@ const GameState = require('./src/app/GameState')
 const Logger = require('./src/libs/Logger')
 const Prompt = require('./src/libs/Prompt')
 const TextLoader = require('./src/libs/TextLoader')
-const gameConfig = require('./src/libs/Config')
+const gameConfig = require('./src/libs/config')
+const exitHandler = require('./src/libs/exitHandler')
+
+let SIGNALS = {
+	SIGHUP: 1,
+	SIGINT: 2,
+	SIGTERM: 15,
+}
+process.on('uncaughtException', exitHandler(1, 'uncaughtException'))
+process.on('unhandledRejection', exitHandler(1, 'unhandledRejection'))
+
 
 async function main(loader, logger, prompt, config) {
 	return new GameUI(new Game(new GameState(config)), loader, logger, prompt).initUI()
@@ -12,12 +22,15 @@ async function main(loader, logger, prompt, config) {
 
 if (require.main === module) {
 	try {
-		main(new TextLoader(), new Logger(), new Prompt(), gameConfig)
-			.then((code) => process.exit(code))
-			.catch((asyncError) => console.error('main: ', asyncError))
+		let textLoader = new TextLoader()
+		Object.keys(SIGNALS).forEach((signal) => {
+			process.on(signal, exitHandler(SIGNALS.signal, textLoader.getTextByKey( 'lose')));
+		});
+		main(textLoader, new Logger(), new Prompt(), gameConfig)
+			.then(exitHandler(0, 'gameEnding'))
+			.catch(exitHandler(1, 'mainPromiseRejectionHandled'))
 	} catch (syncError) {
-		console.error('syncMain:', syncError)
-		process.exit(1)
+		exitHandler(1, 'mainExceptionCaught')(syncError)
 	}
 }
 

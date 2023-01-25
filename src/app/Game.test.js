@@ -1,7 +1,7 @@
 const Game = require('./Game')
 const GameState = require('./GameState')
 const RoomObject = require('./DTO/Object')
-const config = require('../libs/Config')
+const config = require('../libs/config')
 const PlayerCommand = require('./utils/PlayerCommand')
 
 let game

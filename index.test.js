@@ -2,7 +2,7 @@ const TextLoader = require('./src/libs/TextLoader')
 const main = require('./index')
 const Prompt = require('./src/libs/Prompt')
 const Logger = require('./src/libs/Logger')
-const config = require('./src/libs/Config')
+const config = require('./src/libs/config')
 
 let prompt
 let textLoader
