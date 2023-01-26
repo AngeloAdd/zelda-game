@@ -7,11 +7,6 @@ const TextLoader = require('./src/libs/TextLoader')
 const gameConfig = require('./src/libs/config')
 const exitHandler = require('./src/libs/exitHandler')
 
-let SIGNALS = {
-	SIGHUP: 1,
-	SIGINT: 2,
-	SIGTERM: 15
-}
 process.on('uncaughtException', exitHandler(1, 'uncaughtException'))
 process.on('unhandledRejection', exitHandler(1, 'unhandledRejection'))
 
@@ -22,9 +17,7 @@ async function main(loader, logger, prompt, config) {
 if (require.main === module) {
 	try {
 		let textLoader = new TextLoader()
-		Object.keys(SIGNALS).forEach((signal) => {
-			process.on(signal, exitHandler(SIGNALS.signal, textLoader.getTextByKey('lose')))
-		})
+		process.on('SIGINT', exitHandler(0, textLoader.getTextByKey('lose')))
 		main(textLoader, new Logger(), new Prompt(), gameConfig)
 			.then(exitHandler(0, 'gameEnding'))
 			.catch(exitHandler(1, 'mainPromiseRejectionHandled'))

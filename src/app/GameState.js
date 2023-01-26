@@ -12,6 +12,8 @@ module.exports = class GameState {
 		this.monsters = MonsterCollection.fromArray(config.monsters)
 		this.objects = ObjectsCollection.fromArray(config.objects)
 
+		this.playerBagCapacity = config.playerBagCapacity
+		this.roomCapacity = config.roomsCapacity
 		this.isRunning = true
 		this.endingReason = null
 	}
@@ -30,6 +32,14 @@ module.exports = class GameState {
 
 	getObjectsInPlayerBag() {
 		return this.objects.getWhereRoomIsNull()
+	}
+
+	isPlayerBagFull() {
+		return this.getObjectsInPlayerBag().length === this.playerBagCapacity
+	}
+
+	isRoomFull() {
+		return this.getObjectsInCurrentRoom().length === this.roomCapacity
 	}
 
 	setCurrentRoomByNumber(roomNumber) {

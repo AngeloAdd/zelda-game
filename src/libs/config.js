@@ -1,6 +1,6 @@
 const ONE_MILION = 1000000
 const HALF_MILION = ONE_MILION / 2
-const SILVER_SWORD = 'SILVER SWORD'
+const SILVER_DAGGER = 'SILVER DAGGER'
 const MIRROR_SHIELD = 'MIRROR SHIELD'
 const EXITS = {
 	west: 'West',
@@ -26,10 +26,12 @@ module.exports = {
 		{ name: 'GOLDEN CALICE', room: 4, value: HALF_MILION },
 		{ name: 'DUSTY PROOF', room: 8, value: ONE_MILION },
 		{ name: MIRROR_SHIELD, room: 3, value: 0 },
-		{ name: SILVER_SWORD, room: 7, value: 0 }
+		{ name: SILVER_DAGGER, room: 7, value: 0 }
 	],
 	monsters: [
-		{ name: 'Medusa', room: 5, weakness: MIRROR_SHIELD },
-		{ name: 'Dracula', room: 6, weakness: SILVER_SWORD }
-	]
+		{ name: 'Medusa', room: 5, weakness: MIRROR_SHIELD, guardedPath: 'south' },
+		{ name: 'Dracula', room: 6, weakness: SILVER_DAGGER, guardedPath: 'south' }
+	],
+	playerBagCapacity: 3,
+	roomsCapacity: 4
 }

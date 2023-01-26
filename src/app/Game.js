@@ -38,7 +38,7 @@ module.exports = class Game {
 			return ['commands.pick.miss']
 		}
 
-		if (this.state.getObjectsInPlayerBag().length === 3) {
+		if (this.state.isPlayerBagFull()) {
 			return ['commands.pick.full']
 		}
 
@@ -54,7 +54,10 @@ module.exports = class Game {
 			return ['commands.move.invalid']
 		}
 
-		if ('south' === direction && this.state.getMonsterInCurrentRoom()?.alive) {
+		if (
+			this.state.getMonsterInCurrentRoom()?.alive &&
+			this.state.getMonsterInCurrentRoom().guardedPath === direction
+		) {
 			return ['commands.move.closed']
 		}
 
@@ -79,7 +82,7 @@ module.exports = class Game {
 			return ['commands.drop.miss']
 		}
 
-		if (this.state.getObjectsInCurrentRoom().length === 5) {
+		if (this.state.isRoomFull()) {
 			return ['commands.drop.full']
 		}
 

@@ -7,7 +7,7 @@ module.exports = class MonstersCollection {
 	static fromArray(items) {
 		return new MonstersCollection(
 			items.map((el) => {
-				return new Monster(el.name, el.room, true, el.weakness)
+				return new Monster(el.name, el.room, true, el.weakness, el.guardedPath)
 			})
 		)
 	}

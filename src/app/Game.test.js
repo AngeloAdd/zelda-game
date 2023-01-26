@@ -114,8 +114,12 @@ describe('Game command methods modify state correctly or not when', () => {
 			expect(game.state.getObjectsInPlayerBag().length).toEqual(0)
 		})
 		test('does not let player to drop object in full room', () => {
-			game.state.objects.objects.forEach((el) => (el.room = 1))
-			expect(game.state.getObjectsInCurrentRoom().length).toEqual(5)
+			game.state.objects.objects.forEach((el, i) => {
+				if (i < 4) {
+					el.room = 1
+				}
+			})
+			expect(game.state.isRoomFull()).toEqual(true)
 			game.state.objects.objects.push(new RoomObject('BELL BELL', null, 500000))
 			expect(game.state.getObjectsInPlayerBag().length).toEqual(1)
 			expect(game.parseUserCommand(new PlayerCommand('DROP BELL BELL'))).toEqual([
@@ -128,7 +132,7 @@ describe('Game command methods modify state correctly or not when', () => {
 	describe('attack command', () => {
 		test.each([
 			['Medusa', 5, 'MIRROR SHIELD'],
-			['Dracula', 6, 'SILVER SWORD']
+			['Dracula', 6, 'SILVER DAGGER']
 		])('kills %s in room %i with %s', (monsterName, roomNumber, objectName) => {
 			game.state.setCurrentRoomByNumber(roomNumber)
 			game.state.objects.objects.forEach((el) => (el.name === objectName ? (el.room = null) : null))
