@@ -14,7 +14,7 @@ module.exports = class TextLoader {
 		try {
 			for (let i = 0; i < keyRecursive.length; i++) {
 				textFromJson = textFromJson[keyRecursive[i]]
-				if(!textFromJson){
+				if (!textFromJson) {
 					throw new Error('undefined key: ' + key)
 				}
 				if (i === keyRecursive.length - 1) {

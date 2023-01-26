@@ -33,6 +33,7 @@ If you want to contribute to repository, you can install deps for development:
 ```shell
 npm install
 ```
+
 You can run game in watch mode thanks to `nodemon`:
 
 ```shell
