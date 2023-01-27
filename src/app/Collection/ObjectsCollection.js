@@ -1,4 +1,6 @@
 const Object = require('../DTO/Object')
+const locate = require('../utils/locate')
+
 module.exports = class ObjectsCollection {
 	constructor(objects) {
 		this.objects = objects
@@ -9,7 +11,7 @@ module.exports = class ObjectsCollection {
 	}
 
 	getByRoom(roomNumber) {
-		return this.objects.filter((el) => el.roomNumber === roomNumber)
+		return this.objects.filter(locate(roomNumber))
 	}
 
 	getWhereRoomIsNull() {

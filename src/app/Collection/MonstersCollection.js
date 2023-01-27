@@ -1,4 +1,6 @@
 const Monster = require('../DTO/Monster')
+const locate = require('../utils/locate')
+
 module.exports = class MonstersCollection {
 	constructor(monsters) {
 		this.monsters = monsters
@@ -13,7 +15,7 @@ module.exports = class MonstersCollection {
 	}
 
 	findByRoom(roomNumber) {
-		return this.monsters.find((el) => el.roomNumber === roomNumber) ?? null
+		return this.monsters.find(locate(roomNumber)) ?? null
 	}
 
 	setDeadByMonsterName(monsterName) {

@@ -1,19 +1,22 @@
 const Room = require('../DTO/Room')
+const locate = require('../utils/locate')
+
 module.exports = class RoomsCollection {
 	constructor(rooms) {
 		this.rooms = rooms
+		this.currentRoomNumber = 1
 	}
 
 	static fromArray(items) {
 		return new RoomsCollection(
 			items.map((el, i) => {
-				return new Room(false, i + 1, el.exits, i === 0, i === items.length - 1)
+				return new Room(i + 1, el.exits, i === 0, i === items.length - 1)
 			})
 		)
 	}
 
 	getCurrent() {
-		return this.rooms.filter((el) => el.isCurrent)[0]
+		return this.rooms.find(locate(this.currentRoomNumber))
 	}
 
 	setFirstRoomAsCurrent() {
@@ -21,16 +24,6 @@ module.exports = class RoomsCollection {
 	}
 
 	setCurrentRoomByNumber(roomNumber) {
-		this.rooms.forEach((el) => {
-			if (el.roomNumber !== roomNumber && el.isCurrent) {
-				el.isCurrent = false
-			}
-
-			if (el.roomNumber === roomNumber) {
-				el.isCurrent = true
-			}
-
-			return el
-		})
+		this.currentRoomNumber = roomNumber
 	}
 }

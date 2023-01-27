@@ -1,9 +1,9 @@
+const Locatable = require('./Locatable')
 const DIRECTIONS = ['south', 'north', 'east', 'west']
 
-module.exports = class Room {
-	constructor(isCurrent, roomNumber, roomExits, isFirst, isLast) {
-		this.isCurrent = isCurrent
-		this.roomNumber = roomNumber
+module.exports = class Room extends Locatable {
+	constructor(roomNumber, roomExits, isFirst, isLast) {
+		super(roomNumber)
 		this.roomExits = roomExits
 		this.isFirstRoom = isFirst
 		this.isLastRoom = isLast
