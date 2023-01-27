@@ -1,6 +1,9 @@
 const PlayerCommand = require('./utils/PlayerCommand')
 const ucFirst = require('./utils/ucFirst')
 
+const SUCCESS = 0
+const FAILED = 1
+
 module.exports = class GameUI {
 	constructor(game, loader, logger, prompt) {
 		this.game = game
@@ -17,7 +20,7 @@ module.exports = class GameUI {
 			return this._handlePlayerCommand()
 		} catch (e) {
 			console.error(e)
-			return 1
+			return FAILED
 		}
 	}
 
@@ -36,7 +39,7 @@ module.exports = class GameUI {
 
 		if (!this.game.state.isRunning) {
 			this._displayEndGameMessage()
-			return 0
+			return SUCCESS
 		} else {
 			return await this._handlePlayerCommand()
 		}
@@ -56,22 +59,14 @@ module.exports = class GameUI {
 			'red'
 		)
 
-		let roomExit = []
-		roomInfo.roomExits.forEach((el) => {
-			if (roomInfo.isFirst() && el === 'West') {
-				roomExit.push(this.textLoader.getTextByKey('move.lose'))
-			} else {
-				roomExit.push(this.textLoader.getTextByKey('commands.move.exits', { direction: ucFirst(el) }))
-			}
-		})
-		let exits = roomExit.join(', ')
-		this.logger.printWithColors(`${ucFirst(exits)}.`, 'cyan')
+		this.logger.printWithColors(`${this._getRoomExitsText(roomInfo)}.`, 'cyan')
 
 		let monsterByRoom = this.game.state.getMonsterInCurrentRoom()
 		if (monsterByRoom) {
-			let textToPrint = monsterByRoom.name.toLowerCase() + '.'
-			textToPrint += monsterByRoom.alive ? 'alive' : 'dead'
-			this.logger.printWithColors(this.textLoader.getTextByKey(textToPrint), 'blue')
+			this.logger.printWithColors(
+				this.textLoader.getTextByKey(`${monsterByRoom.name}.${monsterByRoom.alive ? 'alive' : 'dead'}`),
+				'blue'
+			)
 		}
 
 		this.game.state.getObjectsInCurrentRoom().forEach((el) => {
@@ -109,5 +104,19 @@ module.exports = class GameUI {
 
 	async _askPlayerName() {
 		return this.prompt.ask(this.textLoader.getTextByKey('player.nameQuestion'))
+	}
+
+	_getRoomExitsText(roomInfo) {
+		return ucFirst(
+			roomInfo.roomExits
+				.map((el) => {
+					if (roomInfo.isFirst() && el === 'West') {
+						return this.textLoader.getTextByKey('move.lose')
+					} else {
+						return this.textLoader.getTextByKey('commands.move.exits', { direction: ucFirst(el) })
+					}
+				})
+				.join(', ')
+		)
 	}
 }
