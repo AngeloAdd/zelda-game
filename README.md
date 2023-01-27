@@ -34,7 +34,7 @@ If you want to contribute to repository, you can install deps for development:
 npm install
 ```
 
-You can run game in watch mode thanks to `nodemon`:
+You can run game in watch mode:
 
 ```shell
 npm run watch
@@ -51,3 +51,10 @@ or in watch mode:
 ```shell
 npm run test:watch
 ```
+
+#### Ideas
+
+- grid class
+- select difficulties (config for 5x5 and 7x7)
+- random object generation
+- random path generation (maze generation -> recursive back tracking?)
