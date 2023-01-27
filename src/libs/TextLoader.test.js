@@ -11,9 +11,7 @@ afterEach(() => {
 
 describe('TextLoader', () => {
 	test('can retrieve assets by key recursively', () => {
-		expect(textLoader.getTextByKey('player.nameQuestion')).toEqual(
-			'What is your name, brave warrior?'
-		)
+		expect(textLoader.getTextByKey('player.nameQuestion')).toEqual('What is your name, brave warrior?')
 		expect(textLoader.getTextByKey('princess.reaction.medusa')).toEqual(
 			'The princess turns to the ominous statue with snake-like hairs.'
 		)
@@ -32,8 +30,6 @@ outside the castle. Are you ready to embark on this thrilling quest and save the
 `)
 	})
 	test('can retrieve assets by key and do substitutions', () => {
-		expect(textLoader.getTextByKey('player.nameResponse', { playerName: 'Ciro' })).toEqual(
-			'Welcome Ciro!'
-		)
+		expect(textLoader.getTextByKey('player.nameResponse', { playerName: 'Ciro' })).toEqual('Welcome Ciro!')
 	})
 })

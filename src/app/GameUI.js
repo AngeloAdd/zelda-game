@@ -52,7 +52,7 @@ module.exports = class GameUI {
 		let roomInfo = this.game.state.getCurrentRoom()
 
 		this.logger.printWithColors(
-			this.textLoader.getTextByKey(`rooms.${roomInfo.roomNumber - 1}`),
+			this.textLoader.getTextByKey(`rooms.${roomInfo.roomCoordinates.toIndex(roomInfo.side)}`),
 			'red'
 		)
 
@@ -61,9 +61,7 @@ module.exports = class GameUI {
 			if (roomInfo.isFirst() && el === 'West') {
 				roomExit.push(this.textLoader.getTextByKey('move.lose'))
 			} else {
-				roomExit.push(
-					this.textLoader.getTextByKey('commands.move.exits', { direction: ucFirst(el) })
-				)
+				roomExit.push(this.textLoader.getTextByKey('commands.move.exits', { direction: ucFirst(el) }))
 			}
 		})
 		let exits = roomExit.join(', ')
@@ -77,10 +75,7 @@ module.exports = class GameUI {
 		}
 
 		this.game.state.getObjectsInCurrentRoom().forEach((el) => {
-			this.logger.printWithColors(
-				this.textLoader.getTextByKey('object.laying', { objectName: el.name }),
-				'yellow'
-			)
+			this.logger.printWithColors(this.textLoader.getTextByKey('object.laying', { objectName: el.name }), 'yellow')
 		})
 
 		if (roomInfo.isLast()) {
@@ -109,10 +104,7 @@ module.exports = class GameUI {
 	}
 
 	_displayEndGameMessage() {
-		this.logger.printWithColors(
-			this.textLoader.getTextByKey(this.game.state.endingReason),
-			'magenta'
-		)
+		this.logger.printWithColors(this.textLoader.getTextByKey(this.game.state.endingReason), 'magenta')
 	}
 
 	async _askPlayerName() {

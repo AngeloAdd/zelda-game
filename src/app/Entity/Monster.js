@@ -1,8 +1,8 @@
 const Locatable = require('./Locatable')
 
 module.exports = class Monster extends Locatable {
-	constructor(name, roomNumber, alive, weakness, guardedPath) {
-		super(roomNumber)
+	constructor(name, roomCoordinates, alive, weakness, guardedPath) {
+		super(roomCoordinates)
 		this.name = name
 		this.alive = alive
 		this.weakness = weakness

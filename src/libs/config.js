@@ -10,6 +10,7 @@ const EXITS = {
 }
 
 module.exports = {
+	side: 3,
 	rooms: [
 		{ exits: [EXITS.west, EXITS.east, EXITS.south] },
 		{ exits: [EXITS.east, EXITS.south, EXITS.west] },
@@ -22,15 +23,15 @@ module.exports = {
 		{ exits: [EXITS.north] }
 	],
 	objects: [
-		{ name: 'GOLDEN EGG', roomNumber: 2, value: HALF_MILION },
-		{ name: 'GOLDEN CALICE', roomNumber: 4, value: HALF_MILION },
-		{ name: 'DUSTY PROOF', roomNumber: 8, value: ONE_MILION },
-		{ name: MIRROR_SHIELD, roomNumber: 3, value: 0 },
-		{ name: SILVER_DAGGER, roomNumber: 7, value: 0 }
+		{ name: 'GOLDEN EGG', roomCoordinates: [0, 1], value: HALF_MILION },
+		{ name: 'GOLDEN CALICE', roomCoordinates: [1, 0], value: HALF_MILION },
+		{ name: 'DUSTY PROOF', roomCoordinates: [2, 1], value: ONE_MILION },
+		{ name: MIRROR_SHIELD, roomCoordinates: [0, 2], value: 0 },
+		{ name: SILVER_DAGGER, roomCoordinates: [2, 0], value: 0 }
 	],
 	monsters: [
-		{ name: 'medusa', roomNumber: 5, weakness: MIRROR_SHIELD, guardedPath: 'south' },
-		{ name: 'dracula', roomNumber: 6, weakness: SILVER_DAGGER, guardedPath: 'south' }
+		{ name: 'medusa', roomCoordinates: [1, 1], weakness: MIRROR_SHIELD, guardedPath: 'south' },
+		{ name: 'dracula', roomCoordinates: [1, 2], weakness: SILVER_DAGGER, guardedPath: 'south' }
 	],
 	playerBagCapacity: 3,
 	roomsCapacity: 4

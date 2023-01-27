@@ -1,12 +1,12 @@
-module.exports = (roomNumber) => (elementToLocate) => {
-	if (typeof elementToLocate?.getRoomNumber !== 'function') {
+module.exports = (roomCoordinates) => (elementToLocate) => {
+	if (typeof elementToLocate?.getroomCoordinates !== 'function') {
 		throw new Error('Element to locate has no getter for room number')
 	}
 
-	//if roomNumber is null we want to check for elements with room number null
-	if (null === elementToLocate.getRoomNumber() && null !== roomNumber) {
-		return false
+	//if roomCoordinates is null we want to check for elements with room number null
+	if (null === elementToLocate.getroomCoordinates()) {
+		return null === roomCoordinates
 	}
 
-	return elementToLocate.roomNumber === roomNumber
+	return elementToLocate.roomCoordinates.equals(roomCoordinates?.row, roomCoordinates?.column)
 }

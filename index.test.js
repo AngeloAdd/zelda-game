@@ -126,9 +126,7 @@ GAME OVER
 		)
 	})
 	test('Died by Medusa', async () => {
-		;['Angelo', 'move east', 'move south', 'attack'].forEach((el) =>
-			prompt.ask.mockReturnValueOnce(el)
-		)
+		;['Angelo', 'move east', 'move south', 'attack'].forEach((el) => prompt.ask.mockReturnValueOnce(el))
 
 		const result = await main(textLoader, logger, prompt, config)
 		expect(result).toEqual(0)

@@ -5,8 +5,8 @@ module.exports = class MonstersCollection {
 		this.monsters = monsters
 	}
 
-	findByRoom(roomNumber) {
-		return this.monsters.find(locate(roomNumber)) ?? null
+	findByRoomCoordinates(roomCoordinates) {
+		return this.monsters.find(locate(roomCoordinates)) ?? null
 	}
 
 	setDeadByMonsterName(monsterName) {

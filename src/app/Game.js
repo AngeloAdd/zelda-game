@@ -36,10 +36,7 @@ module.exports = class Game {
 			return ['commands.move.invalid']
 		}
 
-		if (
-			this.state.getMonsterInCurrentRoom()?.alive &&
-			this.state.getMonsterInCurrentRoom().guardedPath === direction
-		) {
+		if (this.state.getMonsterInCurrentRoom()?.alive && this.state.getMonsterInCurrentRoom().guardedPath === direction) {
 			return ['commands.move.closed']
 		}
 
@@ -48,8 +45,8 @@ module.exports = class Game {
 			return null
 		}
 
-		let newRoomNumber = room.roomNumber + MAP_DIRECTION_TO_ROOM_INCREMENT[direction]
-		this.state.setCurrentRoomByNumber(newRoomNumber)
+		let newroomCoordinates = room.roomCoordinates.to(direction)
+		this.state.setCurrentRoomByNumber(newroomCoordinates)
 
 		return ['commands.move.success', { direction: direction.toUpperCase() }]
 	}

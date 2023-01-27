@@ -3,6 +3,7 @@ const RoomObject = require('./Entity/Object')
 const PlayerCommand = require('./utils/PlayerCommand')
 const GameStateFactory = require('../libs/GameStateFactory')
 const config = require('../libs/config')
+const Coordinates = require('./utils/Coordinates')
 
 let game
 beforeEach(() => {
@@ -19,19 +20,17 @@ describe('Game command methods modify state correctly or not when', () => {
 			expect(game.parseUserCommand(new PlayerCommand(command))).toEqual(['commands.move.invalid'])
 		})
 		test('can make player between rooms', () => {
-			expect(game.state.getCurrentRoom().roomNumber).toEqual(1)
+			expect(game.state.getCurrentRoom().roomCoordinates).toEqual(new Coordinates(0, 0))
 			game.parseUserCommand(new PlayerCommand('MOVE SOUTH'))
-			expect(game.state.getCurrentRoom().roomNumber).toEqual(4)
+			expect(game.state.getCurrentRoom().roomCoordinates).toEqual(new Coordinates(1, 0))
 			game.parseUserCommand(new PlayerCommand('MOVE NORTH'))
-			expect(game.state.getCurrentRoom().roomNumber).toEqual(1)
+			expect(game.state.getCurrentRoom().roomCoordinates).toEqual(new Coordinates(0, 0))
 			game.parseUserCommand(new PlayerCommand('MOVE NORTH'))
-			expect(game.state.getCurrentRoom().roomNumber).toEqual(1)
+			expect(game.state.getCurrentRoom().roomCoordinates).toEqual(new Coordinates(0, 0))
 		})
 		test('bounces player if room is protected by a monster', () => {
-			;['MOVE EAST', 'MOVE SOUTH', 'MOVE SOUTH'].forEach((el) =>
-				game.parseUserCommand(new PlayerCommand(el))
-			)
-			expect(game.state.getCurrentRoom().roomNumber).toEqual(5)
+			;['MOVE EAST', 'MOVE SOUTH', 'MOVE SOUTH'].forEach((el) => game.parseUserCommand(new PlayerCommand(el)))
+			expect(game.state.getCurrentRoom().roomCoordinates).toEqual(new Coordinates(1, 1))
 		})
 		test('makes app end if from room 1 player goes west and exits the castle', () => {
 			game.parseUserCommand(new PlayerCommand('MOVE WEST'))
@@ -61,11 +60,9 @@ describe('Game command methods modify state correctly or not when', () => {
 		})
 		test('allows player pick multiple objects', () => {
 			let response
-			;['MOVE SOUTH', 'PICK GOLDEN CALICE', 'MOVE NORTH', 'MOVE EAST', 'PICK GOLDEN EGG'].forEach(
-				(el) => {
-					response = game.parseUserCommand(new PlayerCommand(el))
-				}
-			)
+			;['MOVE SOUTH', 'PICK GOLDEN CALICE', 'MOVE NORTH', 'MOVE EAST', 'PICK GOLDEN EGG'].forEach((el) => {
+				response = game.parseUserCommand(new PlayerCommand(el))
+			})
 			expect(game.state.getObjectsInPlayerBag().length).toEqual(2)
 			expect(response).toEqual(['commands.pick.success', { objectName: 'GOLDEN EGG' }])
 		})
@@ -73,10 +70,8 @@ describe('Game command methods modify state correctly or not when', () => {
 			game.state.objects.objects.push(new RoomObject('BELL BELL', null, 500000))
 			game.state.objects.objects.push(new RoomObject('CIAO BELL', null, 500000))
 			game.state.objects.objects.push(new RoomObject('ARRIVERDERCI BELL', null, 500000))
-			game.state.objects.objects.push(new RoomObject('ULTIMO BELL', 1, 500000))
-			expect(game.parseUserCommand(new PlayerCommand('PICK ULTIMO BELL'))).toEqual([
-				'commands.pick.full'
-			])
+			game.state.objects.objects.push(new RoomObject('ULTIMO BELL', new Coordinates(0, 0), 500000))
+			expect(game.parseUserCommand(new PlayerCommand('PICK ULTIMO BELL'))).toEqual(['commands.pick.full'])
 			expect(game.state.getObjectsInPlayerBag().length).toEqual(3)
 		})
 	})
@@ -86,9 +81,7 @@ describe('Game command methods modify state correctly or not when', () => {
 			expect(game.state.getObjectsInPlayerBag().length).toEqual(0)
 		})
 		test('allows player to drop nothing if player bags is empty', () => {
-			expect(game.parseUserCommand(new PlayerCommand('DROP GOLDEN CALICE'))).toEqual([
-				'commands.drop.miss'
-			])
+			expect(game.parseUserCommand(new PlayerCommand('DROP GOLDEN CALICE'))).toEqual(['commands.drop.miss'])
 			expect(game.state.getObjectsInCurrentRoom().length).toEqual(0)
 		})
 		test('allows player to drop one object', () => {
@@ -116,44 +109,36 @@ describe('Game command methods modify state correctly or not when', () => {
 		test('does not let player to drop object in full room', () => {
 			game.state.objects.objects.forEach((el, i) => {
 				if (i < 4) {
-					el.roomNumber = 1
+					el.roomCoordinates = new Coordinates(0, 0)
 				}
 			})
 			expect(game.state.isRoomFull()).toEqual(true)
 			game.state.objects.objects.push(new RoomObject('BELL BELL', null, 500000))
 			expect(game.state.getObjectsInPlayerBag().length).toEqual(1)
-			expect(game.parseUserCommand(new PlayerCommand('DROP BELL BELL'))).toEqual([
-				'commands.drop.full'
-			])
+			expect(game.parseUserCommand(new PlayerCommand('DROP BELL BELL'))).toEqual(['commands.drop.full'])
 			expect(game.state.getObjectsInPlayerBag().length).toEqual(1)
 		})
 	})
 
 	describe('attack command', () => {
 		test.each([
-			['Medusa', 5, 'MIRROR SHIELD'],
-			['Dracula', 6, 'SILVER DAGGER']
-		])('kills %s in room %i with %s', (monsterName, roomNumber, objectName) => {
-			game.state.setCurrentRoomByNumber(roomNumber)
-			game.state.objects.objects.forEach((el) =>
-				el.name === objectName ? (el.roomNumber = null) : null
-			)
+			['medusa', [1, 1], 'MIRROR SHIELD'],
+			['dracula', [1, 2], 'SILVER DAGGER']
+		])('kills %s in room %i with %s', (monsterName, roomCoordinates, objectName) => {
+			game.state.setCurrentRoomByNumber(new Coordinates(...roomCoordinates))
+			game.state.objects.objects.forEach((el) => (el.name === objectName ? (el.roomCoordinates = null) : null))
 
 			expect(game.parseUserCommand(new PlayerCommand('ATTACK'))).toEqual([
 				'commands.attack.success.' + monsterName.toLowerCase()
 			])
-			expect(game.state.monsters.monsters.filter((el) => el.name === monsterName)[0].alive).toBe(
-				false
-			)
+			expect(game.state.monsters.monsters.filter((el) => el.name === monsterName)[0].alive).toBe(false)
 		})
 		test.each([
-			[5, 'medusa'],
-			[6, 'dracula']
-		])('causes player death if right weapon is not in player bag', (roomNumber, ending) => {
-			game.state.setCurrentRoomByNumber(roomNumber)
-			expect(game.parseUserCommand(new PlayerCommand('ATTACK'))).toEqual([
-				'commands.attack.defeat.' + ending
-			])
+			[[1, 1], 'medusa'],
+			[[1, 2], 'dracula']
+		])('causes player death if right weapon is not in player bag', (roomCoordinates, ending) => {
+			game.state.setCurrentRoomByNumber(new Coordinates(...roomCoordinates))
+			expect(game.parseUserCommand(new PlayerCommand('ATTACK'))).toEqual(['commands.attack.defeat.' + ending])
 			expect(game.state.isRunning).toEqual(false)
 			expect(game.state.endingReason).toEqual('dead')
 		})
@@ -168,7 +153,7 @@ describe('Game command methods modify state correctly or not when', () => {
 	})
 	describe('exit command', () => {
 		test('exits app with win if in room 9', () => {
-			game.state.setCurrentRoomByNumber(9)
+			game.state.setCurrentRoomByNumber(new Coordinates(2, 2))
 			expect(game.parseUserCommand(new PlayerCommand('EXIT'))).toEqual(['commands.exit.win'])
 			expect(game.state.isRunning).toEqual(false)
 			expect(game.state.endingReason).toEqual('win')

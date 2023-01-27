@@ -5,11 +5,11 @@ module.exports = class ObjectsCollection {
 		this.objects = objects
 	}
 
-	getByRoom(roomNumber) {
-		return this.objects.filter(locate(roomNumber))
+	getByRoomCoordinates(roomCoordinates) {
+		return this.objects.filter(locate(roomCoordinates))
 	}
 
-	getWhereRoomIsNull() {
+	getWhereRoomCoordinatesAreNull() {
 		return this.objects.filter(locate(null))
 	}
 
@@ -17,14 +17,14 @@ module.exports = class ObjectsCollection {
 		this._setRoomOnObject(objectName, null)
 	}
 
-	associateToRoomByObjectName(objectName, roomNumber) {
-		this._setRoomOnObject(objectName, roomNumber)
+	associateToRoomByObjectName(objectName, roomCoordinates) {
+		this._setRoomOnObject(objectName, roomCoordinates)
 	}
 
-	_setRoomOnObject(objectName, roomNumberOrNull) {
+	_setRoomOnObject(objectName, roomCoordinatesOrNull) {
 		this.objects.forEach((el) => {
 			if (el.name === objectName) {
-				el.roomNumber = roomNumberOrNull
+				el.roomCoordinates = roomCoordinatesOrNull
 			}
 		})
 	}

@@ -1,9 +1,9 @@
 module.exports = class Locatable {
-	constructor(roomNumber) {
-		this.roomNumber = roomNumber
+	constructor(roomCoordinates) {
+		this.roomCoordinates = roomCoordinates
 	}
 
-	getRoomNumber() {
-		return this.roomNumber
+	getroomCoordinates() {
+		return this.roomCoordinates
 	}
 }

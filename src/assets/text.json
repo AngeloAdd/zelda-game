@@ -58,7 +58,7 @@
 			"full": "The room is full, you can not drop any object",
 			"miss": "There is no such object in your bag.",
 			"param": "You should specify an object.",
-			"success": "You dropped ##objectName## in room number ##roomNumber##}"
+			"success": "You dropped ##objectName## in room number ##roomCoordinates##}"
 		},
 		"pick": {
 			"full": "Your bag is full you cannot pick up other objects.",
