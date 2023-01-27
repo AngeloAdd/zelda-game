@@ -1,4 +1,3 @@
-const Room = require('../Entity/Room')
 const locate = require('../utils/locate')
 
 module.exports = class RoomsCollection {

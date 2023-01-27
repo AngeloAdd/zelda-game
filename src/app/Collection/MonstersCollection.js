@@ -1,4 +1,3 @@
-const Monster = require('../Entity/Monster')
 const locate = require('../utils/locate')
 
 module.exports = class MonstersCollection {

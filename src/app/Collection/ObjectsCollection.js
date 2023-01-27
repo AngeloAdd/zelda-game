@@ -1,4 +1,3 @@
-const Object = require('../Entity/Object')
 const locate = require('../utils/locate')
 
 module.exports = class ObjectsCollection {
