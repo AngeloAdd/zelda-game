@@ -32,6 +32,8 @@
 	"commands": {
 		"invalid": "Invalid command. You can use LOOK, ATTACK, PICK, DROP, MOVE, EXIT!",
 		"move": {
+			"lose": "the exit to the castle is to your West",
+			"exits": "there is a room to your ##direction##",
 			"invalid": "Invalid direction!",
 			"closed": "The door is protected by the monster",
 			"success": "Moving ##direction##..."

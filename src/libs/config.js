@@ -3,10 +3,10 @@ const HALF_MILION = ONE_MILION / 2
 const SILVER_DAGGER = 'SILVER DAGGER'
 const MIRROR_SHIELD = 'MIRROR SHIELD'
 const EXITS = {
-	west: 'West',
-	east: 'East',
-	south: 'South',
-	north: 'North'
+	west: 'west',
+	east: 'east',
+	south: 'south',
+	north: 'north'
 }
 
 module.exports = {

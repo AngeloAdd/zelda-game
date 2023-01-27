@@ -10,7 +10,7 @@ module.exports = class Room extends Locatable {
 	}
 
 	hasExit(exit) {
-		return DIRECTIONS.includes(exit) && this.roomExits.some((el) => el.toLowerCase() === exit)
+		return DIRECTIONS.includes(exit) && this.roomExits.includes(exit)
 	}
 
 	isFirst() {

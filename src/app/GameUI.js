@@ -1,4 +1,6 @@
 const PlayerCommand = require('./utils/PlayerCommand')
+const ucFirst = require('./utils/ucFirst')
+
 module.exports = class GameUI {
 	constructor(game, loader, logger, prompt) {
 		this.game = game
@@ -57,13 +59,15 @@ module.exports = class GameUI {
 		let roomExit = []
 		roomInfo.roomExits.forEach((el) => {
 			if (roomInfo.isFirst() && el === 'West') {
-				roomExit.push('the exit to the castle is to your West')
+				roomExit.push(this.textLoader.getTextByKey('move.lose'))
 			} else {
-				roomExit.push(`there is a room to your ${el}`)
+				roomExit.push(
+					this.textLoader.getTextByKey('commands.move.exits', { direction: ucFirst(el) })
+				)
 			}
 		})
 		let exits = roomExit.join(', ')
-		this.logger.printWithColors(`${exits[0].toUpperCase()}${exits.slice(1)}.`, 'cyan')
+		this.logger.printWithColors(`${ucFirst(exits)}.`, 'cyan')
 
 		let monsterByRoom = this.game.state.getMonsterInCurrentRoom()
 		if (monsterByRoom) {
