@@ -1,7 +1,7 @@
 module.exports = class Object {
-	constructor(name, room, value) {
+	constructor(name, roomNumber, value) {
 		this.name = name
-		this.room = room
+		this.roomNumber = roomNumber
 		this.value = value
 	}
 }

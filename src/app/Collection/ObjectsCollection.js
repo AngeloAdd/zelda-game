@@ -5,21 +5,21 @@ module.exports = class ObjectsCollection {
 	}
 
 	static fromArray(items) {
-		return new ObjectsCollection(items.map((el) => new Object(el.name, el.room, el.value)))
+		return new ObjectsCollection(items.map((el) => new Object(el.name, el.roomNumber, el.value)))
 	}
 
 	getByRoom(roomNumber) {
-		return this.objects.filter((el) => el.room === roomNumber)
+		return this.objects.filter((el) => el.roomNumber === roomNumber)
 	}
 
 	getWhereRoomIsNull() {
-		return this.objects.filter((el) => el.room === null)
+		return this.objects.filter((el) => el.roomNumber === null)
 	}
 
 	dissociateFromRoomByObjectName(objectName) {
 		this.objects.forEach((el) => {
 			if (el.name === objectName) {
-				el.room = null
+				el.roomNumber = null
 			}
 		})
 	}
@@ -27,7 +27,7 @@ module.exports = class ObjectsCollection {
 	associateToRoomByObjectName(objectName, roomNumber) {
 		this.objects.forEach((el) => {
 			if (el.name === objectName) {
-				el.room = roomNumber
+				el.roomNumber = roomNumber
 			}
 		})
 	}

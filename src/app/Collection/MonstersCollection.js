@@ -7,13 +7,13 @@ module.exports = class MonstersCollection {
 	static fromArray(items) {
 		return new MonstersCollection(
 			items.map((el) => {
-				return new Monster(el.name, el.room, true, el.weakness, el.guardedPath)
+				return new Monster(el.name, el.roomNumber, true, el.weakness, el.guardedPath)
 			})
 		)
 	}
 
 	findByRoom(roomNumber) {
-		return this.monsters.filter((el) => el.room === roomNumber)[0] ?? null
+		return this.monsters.find((el) => el.roomNumber === roomNumber) ?? null
 	}
 
 	setDeadByMonsterName(monsterName) {

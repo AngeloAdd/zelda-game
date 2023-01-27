@@ -22,15 +22,15 @@ module.exports = {
 		{ exits: [EXITS.north] }
 	],
 	objects: [
-		{ name: 'GOLDEN EGG', room: 2, value: HALF_MILION },
-		{ name: 'GOLDEN CALICE', room: 4, value: HALF_MILION },
-		{ name: 'DUSTY PROOF', room: 8, value: ONE_MILION },
-		{ name: MIRROR_SHIELD, room: 3, value: 0 },
-		{ name: SILVER_DAGGER, room: 7, value: 0 }
+		{ name: 'GOLDEN EGG', roomNumber: 2, value: HALF_MILION },
+		{ name: 'GOLDEN CALICE', roomNumber: 4, value: HALF_MILION },
+		{ name: 'DUSTY PROOF', roomNumber: 8, value: ONE_MILION },
+		{ name: MIRROR_SHIELD, roomNumber: 3, value: 0 },
+		{ name: SILVER_DAGGER, roomNumber: 7, value: 0 }
 	],
 	monsters: [
-		{ name: 'Medusa', room: 5, weakness: MIRROR_SHIELD, guardedPath: 'south' },
-		{ name: 'Dracula', room: 6, weakness: SILVER_DAGGER, guardedPath: 'south' }
+		{ name: 'Medusa', roomNumber: 5, weakness: MIRROR_SHIELD, guardedPath: 'south' },
+		{ name: 'Dracula', roomNumber: 6, weakness: SILVER_DAGGER, guardedPath: 'south' }
 	],
 	playerBagCapacity: 3,
 	roomsCapacity: 4

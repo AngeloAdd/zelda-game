@@ -1,7 +1,7 @@
 module.exports = class Monster {
-	constructor(name, room, alive, weakness, guardedPath) {
+	constructor(name, roomNumber, alive, weakness, guardedPath) {
 		this.name = name
-		this.room = room
+		this.roomNumber = roomNumber
 		this.alive = alive
 		this.weakness = weakness
 		this.guardedPath = guardedPath
