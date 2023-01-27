@@ -1,6 +1,6 @@
 const GameUI = require('./src/app/GameUI')
 const Game = require('./src/app/Game')
-const GameState = require('./src/app/GameState')
+const GameStateFactory = require('./src/libs/GameStateFactory')
 const Logger = require('./src/libs/Logger')
 const Prompt = require('./src/libs/Prompt')
 const TextLoader = require('./src/libs/TextLoader')
@@ -11,7 +11,7 @@ process.on('uncaughtException', exitHandler(1, 'uncaughtException'))
 process.on('unhandledRejection', exitHandler(1, 'unhandledRejection'))
 
 async function main(loader, logger, prompt, config) {
-	return new GameUI(new Game(new GameState(config)), loader, logger, prompt).initUI()
+	return new GameUI(new Game(GameStateFactory.create(config)), loader, logger, prompt).initUI()
 }
 
 if (require.main === module) {

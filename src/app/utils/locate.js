@@ -3,7 +3,8 @@ module.exports = (roomNumber) => (elementToLocate) => {
 		throw new Error('Element to locate has no getter for room number')
 	}
 
-	if (null === elementToLocate.getRoomNumber()) {
+	//if roomNumber is null we want to check for elements with room number null
+	if (null === elementToLocate.getRoomNumber() && null !== roomNumber) {
 		return false
 	}
 

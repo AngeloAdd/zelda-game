@@ -1,4 +1,4 @@
-const Object = require('../DTO/Object')
+const Object = require('../Entity/Object')
 const locate = require('../utils/locate')
 
 module.exports = class ObjectsCollection {
@@ -6,30 +6,26 @@ module.exports = class ObjectsCollection {
 		this.objects = objects
 	}
 
-	static fromArray(items) {
-		return new ObjectsCollection(items.map((el) => new Object(el.name, el.roomNumber, el.value)))
-	}
-
 	getByRoom(roomNumber) {
 		return this.objects.filter(locate(roomNumber))
 	}
 
 	getWhereRoomIsNull() {
-		return this.objects.filter((el) => el.roomNumber === null)
+		return this.objects.filter(locate(null))
 	}
 
 	dissociateFromRoomByObjectName(objectName) {
-		this.objects.forEach((el) => {
-			if (el.name === objectName) {
-				el.roomNumber = null
-			}
-		})
+		this._setRoomOnObject(objectName, null)
 	}
 
 	associateToRoomByObjectName(objectName, roomNumber) {
+		this._setRoomOnObject(objectName, roomNumber)
+	}
+
+	_setRoomOnObject(objectName, roomNumberOrNull) {
 		this.objects.forEach((el) => {
 			if (el.name === objectName) {
-				el.roomNumber = roomNumber
+				el.roomNumber = roomNumberOrNull
 			}
 		})
 	}

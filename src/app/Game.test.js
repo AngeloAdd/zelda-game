@@ -1,12 +1,12 @@
 const Game = require('./Game')
-const GameState = require('./GameState')
-const RoomObject = require('./DTO/Object')
-const config = require('../libs/config')
+const RoomObject = require('./Entity/Object')
 const PlayerCommand = require('./utils/PlayerCommand')
+const GameStateFactory = require('../libs/GameStateFactory')
+const config = require('../libs/config')
 
 let game
 beforeEach(() => {
-	game = new Game(new GameState(config))
+	game = new Game(GameStateFactory.create(config))
 })
 
 afterEach(() => {

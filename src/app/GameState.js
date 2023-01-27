@@ -3,17 +3,19 @@ const ObjectsCollection = require('./Collection/ObjectsCollection')
 const MonsterCollection = require('./Collection/MonstersCollection')
 
 module.exports = class GameState {
-	constructor(config) {
-		//this will be demanded to a builder -> random config or reading from config file for objects monster and rooms
-		const roomsCollection = RoomsCollection.fromArray(config.rooms)
-		roomsCollection.setFirstRoomAsCurrent()
+	constructor(
+		roomsCollection,
+		objectsCollection,
+		monstersCollection,
+		playerBagCapacity,
+		roomsCapacity
+	) {
+		//this will be demanded to a factory -> random config or reading from config file for objects monster and rooms
 		this.roomsCollection = roomsCollection
-
-		this.monsters = MonsterCollection.fromArray(config.monsters)
-		this.objects = ObjectsCollection.fromArray(config.objects)
-
-		this.playerBagCapacity = config.playerBagCapacity
-		this.roomCapacity = config.roomsCapacity
+		this.objects = objectsCollection
+		this.monsters = monstersCollection
+		this.playerBagCapacity = playerBagCapacity
+		this.roomCapacity = roomsCapacity
 		this.isRunning = true
 		this.endingReason = null
 	}
