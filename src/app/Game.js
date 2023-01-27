@@ -29,24 +29,6 @@ module.exports = class Game {
 		}
 	}
 
-	_pickObject(objectName) {
-		if (!objectName) {
-			return ['commands.pick.param']
-		}
-		let objectsByRoom = this.state.getObjectsInCurrentRoom()
-		if (!objectsByRoom.some((el) => el.name === objectName)) {
-			return ['commands.pick.miss']
-		}
-
-		if (this.state.isPlayerBagFull()) {
-			return ['commands.pick.full']
-		}
-
-		this.state.pickObject(objectName)
-
-		return ['commands.pick.success', { objectName }]
-	}
-
 	_moveWithDirection(direction) {
 		const room = this.state.getCurrentRoom()
 
@@ -70,6 +52,24 @@ module.exports = class Game {
 		this.state.setCurrentRoomByNumber(newRoomNumber)
 
 		return ['commands.move.success', { direction: direction.toUpperCase() }]
+	}
+
+	_pickObject(objectName) {
+		if (!objectName) {
+			return ['commands.pick.param']
+		}
+		let objectsByRoom = this.state.getObjectsInCurrentRoom()
+		if (!objectsByRoom.some((el) => el.name === objectName)) {
+			return ['commands.pick.miss']
+		}
+
+		if (this.state.isPlayerBagFull()) {
+			return ['commands.pick.full']
+		}
+
+		this.state.pickObject(objectName)
+
+		return ['commands.pick.success', { objectName }]
 	}
 
 	_dropObject(objectName) {
@@ -100,12 +100,12 @@ module.exports = class Game {
 
 		if (!this.state.getObjectsInPlayerBag().some((el) => el.name === monsterByRoom.weakness)) {
 			this.state.setGameEnding('dead')
-			return ['commands.attack.defeat.' + monsterByRoom.name.toLowerCase()]
+			return ['commands.attack.defeat.' + monsterByRoom.name]
 		}
 
 		this.state.killMonster(monsterByRoom.name)
 
-		return ['commands.attack.success.' + monsterByRoom.name.toLowerCase()]
+		return ['commands.attack.success.' + monsterByRoom.name]
 	}
 
 	_exit() {

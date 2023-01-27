@@ -29,8 +29,8 @@ module.exports = {
 		{ name: SILVER_DAGGER, roomNumber: 7, value: 0 }
 	],
 	monsters: [
-		{ name: 'Medusa', roomNumber: 5, weakness: MIRROR_SHIELD, guardedPath: 'south' },
-		{ name: 'Dracula', roomNumber: 6, weakness: SILVER_DAGGER, guardedPath: 'south' }
+		{ name: 'medusa', roomNumber: 5, weakness: MIRROR_SHIELD, guardedPath: 'south' },
+		{ name: 'dracula', roomNumber: 6, weakness: SILVER_DAGGER, guardedPath: 'south' }
 	],
 	playerBagCapacity: 3,
 	roomsCapacity: 4
