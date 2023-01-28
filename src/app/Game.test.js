@@ -7,7 +7,7 @@ const Coordinates = require('./utils/Coordinates')
 
 let game
 beforeEach(() => {
-	game = new Game(GameStateFactory.create(config))
+	game = new Game(GameStateFactory.create(config.easy))
 })
 
 afterEach(() => {

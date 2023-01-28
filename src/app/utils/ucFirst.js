@@ -1,3 +1,9 @@
 module.exports = function ucFirst(string) {
-	return string[0].toUpperCase() + string.slice(1)
+	try {
+		return string[0].toUpperCase() + string.slice(1)
+	} catch (e) {
+		console.log(string)
+		console.log(e)
+		return 'ehibubu'
+	}
 }

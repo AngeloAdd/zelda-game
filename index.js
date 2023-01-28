@@ -11,7 +11,7 @@ process.on('uncaughtException', exitHandler(1, 'uncaughtException'))
 process.on('unhandledRejection', exitHandler(1, 'unhandledRejection'))
 
 async function main(loader, logger, prompt, config) {
-	return new GameUI(new Game(GameStateFactory.create(config)), loader, logger, prompt).initUI()
+	return new GameUI(new Game(GameStateFactory.create(config.easy)), loader, logger, prompt).initUI()
 }
 
 if (require.main === module) {

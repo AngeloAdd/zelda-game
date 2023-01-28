@@ -29,7 +29,8 @@ module.exports = class GameUI {
 	}
 
 	async _handlePlayerCommand() {
-		this._displayStatus()
+		this._displayStatus(this.game.state)
+
 		const playerCommand = await this._askPlayerNextCommand()
 		const response = this.game.parseUserCommand(new PlayerCommand(playerCommand))
 
@@ -51,33 +52,29 @@ module.exports = class GameUI {
 		this.logger.printNewLine()
 	}
 
-	_displayStatus() {
-		let roomInfo = this.game.state.getCurrentRoom()
+	async _askPlayerNextCommand() {
+		return this.prompt.ask(this.textLoader.getTextByKey('player.question'))
+	}
 
-		this.logger.printWithColors(
-			this.textLoader.getTextByKey(`rooms.${roomInfo.roomCoordinates.toIndex(roomInfo.side)}`),
-			'red'
-		)
+	_displayEndGameMessage() {
+		this.logger.printWithColors(this.textLoader.getTextByKey(this.game.state.endingReason), 'magenta')
+	}
 
-		this.logger.printWithColors(`${this._getRoomExitsText(roomInfo)}.`, 'cyan')
+	async _askPlayerName() {
+		return this.prompt.ask(this.textLoader.getTextByKey('player.nameQuestion'))
+	}
 
-		let monsterByRoom = this.game.state.getMonsterInCurrentRoom()
-		if (monsterByRoom) {
-			this.logger.printWithColors(
-				this.textLoader.getTextByKey(`${monsterByRoom.name}.${monsterByRoom.alive ? 'alive' : 'dead'}`),
-				'blue'
-			)
-		}
+	_displayStatus(state) {
+		let roomInfo = state.getCurrentRoom()
+		this._displayRoomDescription(roomInfo)
+		this._displayRoomExits(roomInfo)
+		this._displayRoomMonsterIfExists(state.getMonsterInCurrentRoom())
+		this._displayRoomObjectsIfExist(state.getObjectsInCurrentRoom())
+		this._displayPrincessIfExists(roomInfo)
+		this._displayPlayerBagContentAndValue(state.getObjectsInPlayerBag())
+	}
 
-		this.game.state.getObjectsInCurrentRoom().forEach((el) => {
-			this.logger.printWithColors(this.textLoader.getTextByKey('object.laying', { objectName: el.name }), 'yellow')
-		})
-
-		if (roomInfo.isLast()) {
-			this.logger.printWithColors(this.textLoader.getTextByKey('princess.waiting'), 'blue')
-		}
-
-		let playerBagStatus = this.game.state.getObjectsInPlayerBag()
+	_displayPlayerBagContentAndValue(playerBagStatus) {
 		this.logger.printWithColors(
 			this.textLoader.getTextByKey('bag.capacity', {
 				itemsNumber: playerBagStatus.length,
@@ -94,29 +91,43 @@ module.exports = class GameUI {
 		)
 	}
 
-	async _askPlayerNextCommand() {
-		return this.prompt.ask(this.textLoader.getTextByKey('player.question'))
+	_displayPrincessIfExists(roomInfo) {
+		if (roomInfo.isLast()) {
+			this.logger.printWithColors(this.textLoader.getTextByKey('princess.waiting'), 'blue')
+		}
 	}
 
-	_displayEndGameMessage() {
-		this.logger.printWithColors(this.textLoader.getTextByKey(this.game.state.endingReason), 'magenta')
+	_displayRoomObjectsIfExist(objects) {
+		objects.forEach((el) => {
+			this.logger.printWithColors(this.textLoader.getTextByKey('object.laying', { objectName: el.name }), 'yellow')
+		})
 	}
 
-	async _askPlayerName() {
-		return this.prompt.ask(this.textLoader.getTextByKey('player.nameQuestion'))
+	_displayRoomMonsterIfExists(monsterByRoom) {
+		if (monsterByRoom) {
+			this.logger.printWithColors(
+				this.textLoader.getTextByKey(`${monsterByRoom.name}.${monsterByRoom.alive ? 'alive' : 'dead'}`),
+				'blue'
+			)
+		}
 	}
 
-	_getRoomExitsText(roomInfo) {
-		return ucFirst(
-			roomInfo.roomExits
-				.map((el) => {
-					if (roomInfo.isFirst() && el === 'West') {
-						return this.textLoader.getTextByKey('move.lose')
-					} else {
-						return this.textLoader.getTextByKey('commands.move.exits', { direction: ucFirst(el) })
-					}
-				})
-				.join(', ')
-		)
+	_displayRoomDescription(roomInfo) {
+		this.logger.printWithColors(this.textLoader.getTextByKey(`rooms.${roomInfo.index}`), 'red')
+	}
+
+	_displayRoomExits(roomInfo) {
+		const exitsText = []
+		if (roomInfo.isFirst() && roomInfo.hasExit('west')) {
+			exitsText.push(this.textLoader.getTextByKey('commands.move.lose'))
+		}
+
+		for (const roomInfoKey in roomInfo.roomExits) {
+			if (roomInfo.roomExits[roomInfoKey] && !(roomInfo.isFirst() && roomInfoKey === 'west')) {
+				exitsText.push(this.textLoader.getTextByKey('commands.move.exits', { direction: ucFirst(roomInfoKey) }))
+			}
+		}
+
+		return this.logger.printWithColors(`${ucFirst(exitsText.join(', '))}.`, 'cyan')
 	}
 }

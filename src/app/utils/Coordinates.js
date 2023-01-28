@@ -11,6 +11,7 @@ module.exports = class Coordinates {
 	to(direction) {
 		let row = this.row
 		let column = this.column
+
 		switch (direction) {
 			case 'north':
 				--row
@@ -29,9 +30,5 @@ module.exports = class Coordinates {
 		}
 
 		return new Coordinates(row, column)
-	}
-
-	toIndex(multiplier) {
-		return multiplier * this.row + this.column
 	}
 }
