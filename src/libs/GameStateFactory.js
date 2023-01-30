@@ -9,7 +9,13 @@ const Coordinates = require('../app/utils/Coordinates')
 const Exits = require('../app/utils/Exits')
 
 module.exports = class GameStateFactory {
-	static create(config) {
+	constructor(config, randomizer) {
+		this.config = config
+		this.randomizer = randomizer
+	}
+
+	createWithDifficulty(difficulty) {
+		const config = this.config[difficulty.toString()] ?? this.config['easy']
 		return new GameState(
 			this._makeRoomsCollection(config.rooms, config.mazeSide),
 			this._makeObjectsCollection(config.objects),
@@ -19,7 +25,7 @@ module.exports = class GameStateFactory {
 		)
 	}
 
-	static _makeRoomsCollection(roomsFromConfig, mazeSide) {
+	_makeRoomsCollection(roomsFromConfig, mazeSide) {
 		let row = 0
 		return new Grid(
 			roomsFromConfig.map((exits, i) => {
@@ -32,13 +38,13 @@ module.exports = class GameStateFactory {
 		)
 	}
 
-	static _makeObjectsCollection(objectsFromConfig) {
+	_makeObjectsCollection(objectsFromConfig) {
 		return new ObjectsCollection(
 			objectsFromConfig.map((el) => new Object(el.name, new Coordinates(...el.roomCoordinates), el.value))
 		)
 	}
 
-	static _makeMonstersCollection(monstersFromConfig) {
+	_makeMonstersCollection(monstersFromConfig) {
 		return new MonstersCollection(
 			monstersFromConfig.map(
 				(el) => new Monster(el.name, new Coordinates(...el.roomCoordinates), true, el.weakness, el.guardedPath)

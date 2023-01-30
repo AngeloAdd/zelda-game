@@ -7,3 +7,19 @@ Currently you are in Room 6, the portal room. This is where the wizard opens por
 Currently you are in Room 7, the armory of the dark army. This room is filled with weapons of dark magic, ready for the wizard's army to use in battle. The room is dark and ominous, with a sense of deadly power.
 Currently you are in Room 8, the wizard's study. This room is filled with shelves of ancient books and potions, and a large desk where the evil wizard conducts his dark experiments.
 Currently you are in Room 9, the ritual chamber. This room is used for dark rituals and sacrifices to the wizard's dark powers. The room is adorned with symbols of death and destruction.
+Currently you are in Room 10, the vault of the dark lord. This room is where the wizard stores his treasures and riches, collected from his conquests. The room is filled with gold and jewels, guarded by powerful magic.
+Currently you are in Room 11, the torture chamber. This room is where the wizard's enemies are taken for cruel and inhumane punishment. The walls are stained with blood and the instruments of torture are scattered throughout the room.
+Currently you are in Room 12, the laboratory of the dark lord. This room is where the wizard conducts his twisted experiments, using dark magic to create new and terrifying creatures. The room is filled with test tubes, beakers and strange machinery.
+Currently you are in Room 13, the summoning chamber. This room is where the wizard calls forth his dark minions from the abyss, binding them to his will. The room is adorned with symbols of death and destruction.
+Currently you are in Room 14, the training grounds. This room is where the wizard's minions are trained in the arts of war, ready to do his bidding. The room is filled with weapons and armor, and the sounds of battle can be heard echoing through the halls.
+Currently you are in Room 15, the arena of the dark lord. This room is where the wizard holds gladiatorial games, pitting his minions against each other for his amusement. The room is filled with blood-soaked sand and the roar of the crowd.
+Currently you are in Room 16, the arcane laboratory. This room is where the wizard conducts his research on forbidden magic, experimenting with dark and dangerous spells. The room is filled with strange machinery and mystical artifacts.
+Currently you are in Room 17, the chamber of the undead. This room is where the wizard raises and controls his army of the undead, using dark magic to keep them in his thrall. The room is filled with the stench of death and decay.
+Currently you are in Room 18, the chamber of sacrifices. This room is where the wizard makes sacrifices to his dark powers, using the blood of his victims to fuel his magic. The room is adorned with symbols of death and destruction.
+Currently you are in Room 19, the kitchen. This room is where the castle's meals are prepared in eerie silence, with large hearths and ample storage for mysterious ingredients.
+Currently you are in Room 20, the dining hall. This room is where the castle's residents and guests dine, with long tables surrounded by ghostly presences and uncomfortable seating.
+Currently you are in Room 21, the master bedroom. This room is the personal quarters of the castle's ruler, featuring a large bed and luxurious furnishings.
+Currently you are in Room 22, the treasury. This room is where the castle's wealth is kept, with strong boxes and guarded by soldiers.
+Currently you are in Room 23, the courtyard. This open space within the castle is used for sinister exercises, bloodthirsty recreation, and gatherings of the macabre.
+Currently you are in Room 24, the dungeon. This room is where the wizard's failed experiments are held, roaming the endless corridors.
+Currently you are in Room 25, the dark chapel. This room is used for dark religious ceremonies and eerie private meditation, with stained glass windows depicting ominous scenes and an altar drenched in shadows

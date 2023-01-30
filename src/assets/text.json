@@ -2,7 +2,8 @@
 	"player": {
 		"nameQuestion": "What is your name, brave warrior?",
 		"nameResponse": "Welcome ##playerName##!",
-		"question": "What do you want to do?"
+		"question": "What do you want to do?",
+		"difficulty": "You selected ##difficulty##! Loading Game..."
 	},
 	"princess": {
 		"reaction": {
@@ -28,15 +29,20 @@
 		"alive": "Dracula, the immortal vampire, stands guard at a locked door, his piercing gaze daring anyone to try and enter.",
 		"dead": "A small pile of ash and dust lies on the floor, the remnants of a once powerful being."
 	},
+	"fenrir": {
+		"alive": "Fenrir, the monstrous wolf, stands guard at a locked door, his jaws drip with the blood of those who dared to challenge him.",
+		"dead": "A giant wolf lies defeated and still, its body a testament to the ferocity of the battle that took place."
+	},
 	"cashStatus": "Current cash: ##amount##",
 	"commands": {
 		"invalid": "Invalid command. You can use LOOK, ATTACK, PICK, DROP, MOVE, EXIT!",
 		"move": {
 			"lose": "the exit to the castle is to your West",
 			"exits": "there is a room to your ##direction##",
-			"invalid": "Invalid direction!",
 			"closed": "The door is protected by the monster",
-			"success": "Moving ##direction##..."
+			"success": "Moving ##direction##...",
+			"invalid": "Invalid direction!",
+			"required": "You should specify a direction between North, East, South or West."
 		},
 		"look": "You cautiously scan the room, feeling as if the room's eerie presence is staring at you in return.",
 		"exit": {
@@ -47,11 +53,13 @@
 			"null": "You start moving your arms in the air. Are you ok?",
 			"defeat": {
 				"medusa": "Medusa's gaze turns you to stone as you foolishly attack her.",
-				"dracula": "Dracula drains you of your blood while you helplessly struggle to hurt him."
+				"dracula": "Dracula drains you of your blood while you helplessly struggle to hurt him.",
+				"fenrir": "Fenrir closes his jaws crushing you in a final deadly embrace."
 			},
 			"success": {
 				"medusa": "Medusa's eyes widen in horror as she realizes that her curse has now been turned against her.",
-				"dracula": "The powerful vampire exudes an eerie silence as his body slowly disintegrates into dust."
+				"dracula": "The powerful vampire exudes an eerie silence as his body slowly disintegrates into dust.",
+				"fenrir": "The monstrous wolf falls in battle as a lance pierces his heart, his mighty frame collapsing in defeat."
 			}
 		},
 		"drop": {

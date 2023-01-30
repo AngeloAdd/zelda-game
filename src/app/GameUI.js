@@ -1,8 +1,9 @@
 const PlayerCommand = require('./utils/PlayerCommand')
 const ucFirst = require('./utils/ucFirst')
+const Difficulty = require('./utils/Difficulty')
 
-const SUCCESS = 0
-const FAILED = 1
+const SUCCESS_EXIT = 0
+const FAIL_EXIT = 1
 
 module.exports = class GameUI {
 	constructor(game, loader, logger, prompt) {
@@ -17,11 +18,22 @@ module.exports = class GameUI {
 			this._displayStartingMessage()
 			const playerName = await this._askPlayerName()
 			this._displayGameResponse(['player.nameResponse', { playerName }])
+			const difficulty = new Difficulty(await this._askPlayerToSelectDifficulty())
+			this._initializeStateWithDifficulty(difficulty)
 			return this._handlePlayerCommand()
 		} catch (e) {
 			console.error(e)
-			return FAILED
+			return FAIL_EXIT
 		}
+	}
+
+	_initializeStateWithDifficulty(difficulty) {
+		this.game.initializeState(difficulty.toString())
+		this._displayGameResponse(['player.difficulty', { difficulty }])
+	}
+
+	async _askPlayerToSelectDifficulty() {
+		return await this.prompt.ask('Select a difficulty level and press enter (1.easy, 2.normal)')
 	}
 
 	_displayStartingMessage() {
@@ -40,7 +52,7 @@ module.exports = class GameUI {
 
 		if (!this.game.state.isRunning) {
 			this._displayEndGameMessage()
-			return SUCCESS
+			return SUCCESS_EXIT
 		} else {
 			return await this._handlePlayerCommand()
 		}
@@ -113,7 +125,7 @@ module.exports = class GameUI {
 	}
 
 	_displayRoomDescription(roomInfo) {
-		this.logger.printWithColors(this.textLoader.getTextByKey(`rooms.${roomInfo.index}`), 'red')
+		this.logger.printWithColors(this.textLoader.getTextByKey(`rooms.${roomInfo.index()}`), 'red')
 	}
 
 	_displayRoomExits(roomInfo) {

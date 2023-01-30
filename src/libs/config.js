@@ -70,10 +70,7 @@ const normal = {
 	objects: [
 		{ name: 'GOLDEN EGG', roomCoordinates: [0, 1], value: HALF_MILION },
 		{ name: 'GOLDEN CALICE', roomCoordinates: [1, 0], value: HALF_MILION },
-		{ name: 'DUSTY PROOF', roomCoordinates: [2, 1], value: ONE_MILION },
-		{ name: 'DUSTY PROOF', roomCoordinates: [2, 1], value: ONE_MILION },
-		{ name: 'DUSTY PROOF', roomCoordinates: [2, 1], value: ONE_MILION },
-		{ name: 'DUSTY PROOF', roomCoordinates: [2, 1], value: ONE_MILION },
+		{ name: 'DUSTY PROOF', roomCoordinates: [4, 3], value: ONE_MILION },
 		{ name: MIRROR_SHIELD, roomCoordinates: [3, 3], value: 0 },
 		{ name: SILVER_DAGGER, roomCoordinates: [0, 2], value: 0 },
 		{ name: MAGIC_LANCE, roomCoordinates: [4, 0], value: 0 }
@@ -83,7 +80,7 @@ const normal = {
 		{ name: 'dracula', roomCoordinates: [3, 2], weakness: SILVER_DAGGER, guardedPath: 'south' },
 		{ name: 'fenrir', roomCoordinates: [3, 4], weakness: MAGIC_LANCE, guardedPath: 'south' }
 	],
-	playerBagCapacity: 3,
+	playerBagCapacity: 5,
 	roomsCapacity: 5
 }
 

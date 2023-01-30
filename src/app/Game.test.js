@@ -4,10 +4,12 @@ const PlayerCommand = require('./utils/PlayerCommand')
 const GameStateFactory = require('../libs/GameStateFactory')
 const config = require('../libs/config')
 const Coordinates = require('./utils/Coordinates')
+const Randomizer = require('../libs/Randomizer')
 
 let game
 beforeEach(() => {
-	game = new Game(GameStateFactory.create(config.easy))
+	game = new Game(new GameStateFactory(config, new Randomizer()))
+	game.initializeState('easy')
 })
 
 afterEach(() => {
@@ -16,8 +18,11 @@ afterEach(() => {
 
 describe('Game command methods modify state correctly or not when', () => {
 	describe('move command', () => {
-		test.each(['MOVE S', 'MOVE', 'MOVE ', 'MOVE NORTH'])('returns invalid message', (command) => {
+		test.each(['MOVE S', 'MOVE NORTH'])('returns invalid message', (command) => {
 			expect(game.parseUserCommand(new PlayerCommand(command))).toEqual(['commands.move.invalid'])
+		})
+		test.each(['MOVE', 'MOVE '])('returns required parameter message', (command) => {
+			expect(game.parseUserCommand(new PlayerCommand(command))).toEqual(['commands.move.required'])
 		})
 		test('can make player between rooms', () => {
 			expect(game.state.getCurrentRoom().roomCoordinates).toEqual(new Coordinates(0, 0))

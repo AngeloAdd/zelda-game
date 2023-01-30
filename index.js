@@ -4,21 +4,22 @@ const GameStateFactory = require('./src/libs/GameStateFactory')
 const Logger = require('./src/libs/Logger')
 const Prompt = require('./src/libs/Prompt')
 const TextLoader = require('./src/libs/TextLoader')
+const Randomizer = require('./src/libs/Randomizer')
 const gameConfig = require('./src/libs/config')
 const exitHandler = require('./src/libs/exitHandler')
 
 process.on('uncaughtException', exitHandler(1, 'uncaughtException'))
 process.on('unhandledRejection', exitHandler(1, 'unhandledRejection'))
 
-async function main(loader, logger, prompt, config) {
-	return new GameUI(new Game(GameStateFactory.create(config.easy)), loader, logger, prompt).initUI()
+async function main(loader, logger, prompt, config, randomizer) {
+	return new GameUI(new Game(new GameStateFactory(config, randomizer)), loader, logger, prompt).initUI()
 }
 
 if (require.main === module) {
 	try {
 		let textLoader = new TextLoader()
 		process.on('SIGINT', exitHandler(0, textLoader.getTextByKey('lose')))
-		main(textLoader, new Logger(), new Prompt(), gameConfig)
+		main(textLoader, new Logger(), new Prompt(), gameConfig, new Randomizer())
 			.then(exitHandler(0, 'gameEnding'))
 			.catch(exitHandler(1, 'mainPromiseRejectionHandled'))
 	} catch (syncError) {

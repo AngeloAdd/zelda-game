@@ -1,13 +1,11 @@
-const MAP_DIRECTION_TO_ROOM_INCREMENT = {
-	south: 3,
-	north: -3,
-	east: 1,
-	west: -1
-}
-
 module.exports = class Game {
-	constructor(state) {
-		this.state = state
+	constructor(factory) {
+		this.factory = factory
+		this.state = null
+	}
+
+	initializeState(difficulty) {
+		this.state = this.factory.createWithDifficulty(difficulty)
 	}
 
 	parseUserCommand(playerCommand) {
@@ -32,7 +30,11 @@ module.exports = class Game {
 	_moveWithDirection(direction) {
 		const room = this.state.getCurrentRoom()
 
-		if (!direction || !room.hasExit(direction)) {
+		if (!direction) {
+			return ['commands.move.required']
+		}
+
+		if (!room.hasExit(direction)) {
 			return ['commands.move.invalid']
 		}
 
@@ -45,8 +47,7 @@ module.exports = class Game {
 			return null
 		}
 
-		let newroomCoordinates = room.roomCoordinates.to(direction)
-		this.state.setCurrentRoomByNumber(newroomCoordinates)
+		this.state.setCurrentRoomByNumber(room.roomCoordinates.to(direction))
 
 		return ['commands.move.success', { direction: direction.toUpperCase() }]
 	}
