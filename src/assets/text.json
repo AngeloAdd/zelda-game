@@ -61,7 +61,7 @@
 			}
 		},
 		"drop": {
-			"full": "The room is full, you can not drop any object",
+			"full": "The room is full, you can not drop any object.",
 			"miss": "There is no such object in your bag.",
 			"param": "You should specify an object.",
 			"success": "You dropped ##objectName## on the floor."

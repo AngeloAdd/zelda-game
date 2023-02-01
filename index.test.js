@@ -62,13 +62,13 @@ describe('Game', () => {
 			new GameStateFactoryFake(config, new Randomizer(), [
 				[0, 0],
 				[0, 0],
-				[1, 1],
 				[1, 1]
 			]),
 			textLoader,
 			logger,
 			prompt
 		)
+
 		expect(result).toEqual(0)
 		expect(logger.printWithColors).toHaveBeenCalledWith(
 			'You picked GOLDEN NUGGET x2 and put it in your bag.',
@@ -183,13 +183,13 @@ GAME OVER
 
 		const result = await main(
 			new GameStateFactoryFake(config, new Randomizer(), [
-				[1, 1],
-				[1, 1],
-				[1, 1],
-				[1, 1],
-				[1, 1],
-				[1, 1],
-				[1, 1]
+				[0, 0],
+				[0, 0],
+				[0, 0],
+				[0, 0],
+				[0, 0],
+				[0, 0],
+				[0, 0]
 			]),
 			textLoader,
 			logger,
@@ -198,7 +198,7 @@ GAME OVER
 
 		expect(result).toEqual(0)
 		expect(logger.printWithColors).toHaveBeenCalledWith(
-			'The room is full, you can not drop any object',
+			'The room is full, you can not drop any object.',
 			'magenta',
 			'',
 			'bright'

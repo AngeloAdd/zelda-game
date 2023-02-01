@@ -23,17 +23,20 @@ module.exports = class GameStateFactoryFake extends GameStateFactory {
 
 	_makeObjectsCollection(objectsFromConfig, grid, side, roomsCapacity) {
 		const collection = new ObjectsCollection([])
-		let i = 0
 		objectsFromConfig.forEach((el) => {
 			let coord
 			if (el.name === 'GOLDEN NUGGET') {
-				let fakeCoordinate = this.fakeCoordinates[i] ?? [2, 2]
-				coord = new Coordinates(...fakeCoordinate)
-				++i
+				let i = 0
+				while (i < 7) {
+					let fakeCoordinate = this.fakeCoordinates[i] ?? [2, 2]
+					coord = new Coordinates(...fakeCoordinate)
+					collection.add(new Object(el.name, coord, el.value))
+					++i
+				}
 			} else {
 				coord = new Coordinates(...el.roomCoordinates)
+				collection.add(new Object(el.name, coord, el.value))
 			}
-			collection.add(new Object(el.name, coord, el.value))
 		})
 
 		return collection
