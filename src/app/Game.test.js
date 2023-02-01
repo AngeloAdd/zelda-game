@@ -2,13 +2,12 @@ const Game = require('./Game')
 const RoomObject = require('./Entity/Object')
 const PlayerCommand = require('./utils/PlayerCommand')
 const GameStateFactory = require('../libs/GameStateFactory')
-const config = require('../libs/config')
 const Coordinates = require('./utils/Coordinates')
-const Randomizer = require('../libs/Randomizer')
+const config = require('../libs/config')
 
 let game
 beforeEach(() => {
-	game = new Game(new GameStateFactory(config, new Randomizer()))
+	game = new Game(new GameStateFactory(config))
 	game.initializeState('easy')
 })
 

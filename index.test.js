@@ -1,14 +1,12 @@
 const TextLoader = require('./src/libs/TextLoader')
-const main = require('./index')
 const Prompt = require('./src/libs/Prompt')
 const Logger = require('./src/libs/Logger')
 const config = require('./src/libs/config')
-const Randomizer = require('./src/libs/Randomizer')
+const main = require('./index')
 
 let prompt
 let textLoader
 let logger
-let randomizer
 beforeEach(() => {
 	prompt = new Prompt()
 	logger = new Logger()
@@ -16,8 +14,6 @@ beforeEach(() => {
 	textLoader = new TextLoader()
 	process.exit = jest.fn()
 	prompt.ask = jest.fn()
-	randomizer = new Randomizer()
-	randomizer.betweenMinAndMax = jest.fn()
 })
 
 afterEach(() => {

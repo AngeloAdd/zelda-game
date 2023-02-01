@@ -1,7 +1,3 @@
-const RoomsCollection = require('./Collection/Grid')
-const ObjectsCollection = require('./Collection/ObjectsCollection')
-const MonsterCollection = require('./Collection/MonstersCollection')
-
 module.exports = class GameState {
 	constructor(roomsCollection, objectsCollection, monstersCollection, playerBagCapacity, roomsCapacity) {
 		//this will be demanded to a factory -> random config or reading from config file for objects monster and rooms

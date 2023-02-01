@@ -6,7 +6,7 @@ module.exports = function exitHandler(code, cause) {
 		logger.printNewLine()
 		if (code === 1) {
 			logger.printWithColors(cause + ': ', 'black', 'red', 'bright')
-			logger.printWithColors(error, 'black', 'red', 'bright')
+			logger.printWithColors(error.stack, 'black', 'red', 'bright')
 		} else {
 			logger.printWithColors(cause, 'magenta', '', 'bright')
 		}

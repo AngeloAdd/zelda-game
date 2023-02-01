@@ -14,9 +14,7 @@
 		"following": "The princess looks at you with hope in her eyes."
 	},
 	"object": {
-		"dropped": "",
-		"laying": "The ##objectName## is lying on the floor.",
-		"picked": ""
+		"laying": "The ##objectName## is lying on the floor."
 	},
 	"bag": {
 		"capacity": "Your bag contains ##itemsNumber##/##capacity## items:"
