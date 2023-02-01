@@ -14,9 +14,7 @@
 		"following": "The princess looks at you with hope in her eyes."
 	},
 	"object": {
-		"dropped": "",
-		"laying": "The ##objectName## is lying on the floor.",
-		"picked": ""
+		"laying": "The ##objectName## is lying on the floor."
 	},
 	"bag": {
 		"capacity": "Your bag contains ##itemsNumber##/##capacity## items:"
@@ -66,7 +64,7 @@
 			"full": "The room is full, you can not drop any object",
 			"miss": "There is no such object in your bag.",
 			"param": "You should specify an object.",
-			"success": "You dropped ##objectName## in room number ##roomCoordinates##}"
+			"success": "You dropped ##objectName## on the floor."
 		},
 		"pick": {
 			"full": "Your bag is full you cannot pick up other objects.",

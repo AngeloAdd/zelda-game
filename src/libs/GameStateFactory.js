@@ -16,16 +16,17 @@ module.exports = class GameStateFactory {
 
 	createWithDifficulty(difficulty) {
 		const config = this.config[difficulty.toString()] ?? this.config['easy']
+		let grid = this._makeGrid(config.rooms, config.mazeSide)
 		return new GameState(
-			this._makeRoomsCollection(config.rooms, config.mazeSide),
-			this._makeObjectsCollection(config.objects),
+			grid,
+			this._makeObjectsCollection(config.objects, grid, config.mazeSide, config.roomsCapacity),
 			this._makeMonstersCollection(config.monsters),
 			config.playerBagCapacity,
 			config.roomsCapacity
 		)
 	}
 
-	_makeRoomsCollection(roomsFromConfig, mazeSide) {
+	_makeGrid(roomsFromConfig, mazeSide) {
 		let row = 0
 		return new Grid(
 			roomsFromConfig.map((exits, i) => {
@@ -38,10 +39,34 @@ module.exports = class GameStateFactory {
 		)
 	}
 
-	_makeObjectsCollection(objectsFromConfig) {
-		return new ObjectsCollection(
-			objectsFromConfig.map((el) => new Object(el.name, new Coordinates(...el.roomCoordinates), el.value))
-		)
+	_makeObjectsCollection(objectsFromConfig, grid, side, roomsCapacity) {
+		const collection = new ObjectsCollection([])
+		const rooms = {}
+		for (let i = 0; i < objectsFromConfig.length; i++) {
+			const object = objectsFromConfig[i]
+			if (Array.isArray(object.roomCoordinates)) {
+				let roomCoordinates = new Coordinates(...object.roomCoordinates)
+				rooms[`${roomCoordinates.row}.${roomCoordinates.column}`] =
+					(rooms[`${roomCoordinates.row}.${roomCoordinates.column}`] ?? 0) + 1
+				collection.add(new Object(object.name, roomCoordinates, object.value))
+			} else {
+				let randomObjectsNumber = object.quantity
+				while (randomObjectsNumber > 0) {
+					let roomCoordinates = new Coordinates(
+						this.randomizer.betweenMinAndMax(0, side - 1),
+						this.randomizer.betweenMinAndMax(0, side - 1)
+					)
+					if (!(rooms[`${roomCoordinates.row}.${roomCoordinates.column}`] === roomsCapacity)) {
+						rooms[`${roomCoordinates.row}.${roomCoordinates.column}`] =
+							(rooms[`${roomCoordinates.row}.${roomCoordinates.column}`] ?? 0) + 1
+						collection.add(new Object(object.name, roomCoordinates, object.value))
+						--randomObjectsNumber
+					}
+				}
+			}
+		}
+
+		return collection
 	}
 
 	_makeMonstersCollection(monstersFromConfig) {

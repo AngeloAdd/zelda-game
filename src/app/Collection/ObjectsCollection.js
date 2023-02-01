@@ -13,19 +13,28 @@ module.exports = class ObjectsCollection {
 		return this.objects.filter(locate(null))
 	}
 
-	dissociateFromRoomByObjectName(objectName) {
-		this._setRoomOnObject(objectName, null)
+	dissociateFromRoomByObjectName(objectName, currentRoomCoordinates) {
+		this.objects.forEach((el) => {
+			if (
+				el.name === objectName &&
+				el.roomCoordinates?.equals(currentRoomCoordinates?.row, currentRoomCoordinates?.column)
+			) {
+				el.roomCoordinates = null
+			}
+		})
 	}
 
 	associateToRoomByObjectName(objectName, roomCoordinates) {
-		this._setRoomOnObject(objectName, roomCoordinates)
-	}
-
-	_setRoomOnObject(objectName, roomCoordinatesOrNull) {
 		this.objects.forEach((el) => {
-			if (el.name === objectName) {
-				el.roomCoordinates = roomCoordinatesOrNull
+			if (el.name === objectName && el.roomCoordinates === null) {
+				el.roomCoordinates = roomCoordinates
 			}
 		})
+	}
+
+	add(object) {
+		this.objects.push(object)
+
+		return this
 	}
 }

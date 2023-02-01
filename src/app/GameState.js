@@ -1,7 +1,3 @@
-const RoomsCollection = require('./Collection/Grid')
-const ObjectsCollection = require('./Collection/ObjectsCollection')
-const MonsterCollection = require('./Collection/MonstersCollection')
-
 module.exports = class GameState {
 	constructor(roomsCollection, objectsCollection, monstersCollection, playerBagCapacity, roomsCapacity) {
 		//this will be demanded to a factory -> random config or reading from config file for objects monster and rooms
@@ -30,12 +26,12 @@ module.exports = class GameState {
 		return this.objects.getWhereRoomCoordinatesAreNull()
 	}
 
-	isPlayerBagFull() {
-		return this.getObjectsInPlayerBag().length === this.playerBagCapacity
+	isPlayerBagFull(numberOfObjectsInTheRoom) {
+		return this.getObjectsInPlayerBag().length + numberOfObjectsInTheRoom > this.playerBagCapacity
 	}
 
-	isRoomFull() {
-		return this.getObjectsInCurrentRoom().length === this.roomCapacity
+	isRoomFull(numberOfObjectsToDrop) {
+		return this.getObjectsInCurrentRoom().length + numberOfObjectsToDrop > this.roomCapacity
 	}
 
 	setCurrentRoomByNumber(roomCoordinates) {
@@ -43,7 +39,7 @@ module.exports = class GameState {
 	}
 
 	pickObject(objectName) {
-		this.objects.dissociateFromRoomByObjectName(objectName)
+		this.objects.dissociateFromRoomByObjectName(objectName, this.getCurrentRoom().roomCoordinates)
 	}
 
 	dropObject(objectName) {

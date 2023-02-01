@@ -61,13 +61,14 @@ module.exports = class Game {
 			return ['commands.pick.miss']
 		}
 
-		if (this.state.isPlayerBagFull()) {
+		const numberOfObjectsInTheRoom = this.state.getObjectsInCurrentRoom().filter((el) => el.name === objectName).length
+		if (this.state.isPlayerBagFull(numberOfObjectsInTheRoom)) {
 			return ['commands.pick.full']
 		}
 
 		this.state.pickObject(objectName)
 
-		return ['commands.pick.success', { objectName }]
+		return ['commands.pick.success', { objectName: `${objectName} x${numberOfObjectsInTheRoom}` }]
 	}
 
 	_dropObject(objectName) {
@@ -80,13 +81,14 @@ module.exports = class Game {
 			return ['commands.drop.miss']
 		}
 
-		if (this.state.isRoomFull()) {
+		const numberOfObjectsToDrop = this.state.getObjectsInPlayerBag().filter((el) => el.name === objectName).length
+		if (this.state.isRoomFull(numberOfObjectsToDrop)) {
 			return ['commands.drop.full']
 		}
 
 		this.state.dropObject(objectName)
 
-		return ['commands.drop.success', { objectName }]
+		return ['commands.drop.success', { objectName: `${objectName} x${numberOfObjectsToDrop}` }]
 	}
 
 	_attack() {

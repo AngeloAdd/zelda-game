@@ -11,15 +11,15 @@ const exitHandler = require('./src/libs/exitHandler')
 process.on('uncaughtException', exitHandler(1, 'uncaughtException'))
 process.on('unhandledRejection', exitHandler(1, 'unhandledRejection'))
 
-async function main(loader, logger, prompt, config, randomizer) {
-	return new GameUI(new Game(new GameStateFactory(config, randomizer)), loader, logger, prompt).initUI()
+async function main(factory, loader, logger, prompt) {
+	return new GameUI(new Game(factory), loader, logger, prompt).initUI()
 }
 
 if (require.main === module) {
 	try {
 		let textLoader = new TextLoader()
 		process.on('SIGINT', exitHandler(0, textLoader.getTextByKey('lose')))
-		main(textLoader, new Logger(), new Prompt(), gameConfig, new Randomizer())
+		main(new GameStateFactory(gameConfig, new Randomizer()), textLoader, new Logger(), new Prompt())
 			.then(exitHandler(0, 'gameEnding'))
 			.catch(exitHandler(1, 'mainPromiseRejectionHandled'))
 	} catch (syncError) {

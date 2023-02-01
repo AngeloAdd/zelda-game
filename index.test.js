@@ -2,13 +2,13 @@ const TextLoader = require('./src/libs/TextLoader')
 const main = require('./index')
 const Prompt = require('./src/libs/Prompt')
 const Logger = require('./src/libs/Logger')
-const config = require('./src/libs/config')
 const Randomizer = require('./src/libs/Randomizer')
+const config = require('./src/libs/config')
+const GameStateFactoryFake = require('./fakes/GameStateFactoryFake')
 
 let prompt
 let textLoader
 let logger
-let randomizer
 beforeEach(() => {
 	prompt = new Prompt()
 	logger = new Logger()
@@ -16,8 +16,6 @@ beforeEach(() => {
 	textLoader = new TextLoader()
 	process.exit = jest.fn()
 	prompt.ask = jest.fn()
-	randomizer = new Randomizer()
-	randomizer.betweenMinAndMax = jest.fn()
 })
 
 afterEach(() => {
@@ -29,6 +27,8 @@ describe('Game', () => {
 		;[
 			'Angelo',
 			'1',
+			'pick golden nugget',
+			'drop golden nugget',
 			'move south',
 			'pick golden calice',
 			'move north',
@@ -39,6 +39,7 @@ describe('Game', () => {
 			'move west',
 			'move south',
 			'attack',
+			'pick golden nugget',
 			'move south',
 			'move west',
 			'drop mirror shield',
@@ -57,8 +58,36 @@ describe('Game', () => {
 			'exit'
 		].forEach((el) => prompt.ask.mockReturnValueOnce(el))
 
-		const result = await main(textLoader, logger, prompt, config)
+		const result = await main(
+			new GameStateFactoryFake(config, new Randomizer(), [
+				[0, 0],
+				[0, 0],
+				[1, 1],
+				[1, 1]
+			]),
+			textLoader,
+			logger,
+			prompt
+		)
 		expect(result).toEqual(0)
+		expect(logger.printWithColors).toHaveBeenCalledWith(
+			'You picked GOLDEN NUGGET x2 and put it in your bag.',
+			'magenta',
+			'',
+			'bright'
+		)
+		expect(logger.printWithColors).toHaveBeenCalledWith(
+			'You dropped GOLDEN NUGGET x2 on the floor.',
+			'magenta',
+			'',
+			'bright'
+		)
+		expect(logger.printWithColors).toHaveBeenCalledWith(
+			'You picked GOLDEN NUGGET x1 and put it in your bag.',
+			'magenta',
+			'',
+			'bright'
+		)
 		expect(logger.printWithColors).toHaveBeenCalledWith(
 			`You lead the princess out of the castle safe and sound, her trust in you will never waver.
 YOU WIN!!!
@@ -78,14 +107,13 @@ YOU WIN!!!
 	])('Various invalid moves: %s', async (invalidMove, response) => {
 		;['Angelo', '1', invalidMove, 'exit'].forEach((el) => prompt.ask.mockReturnValueOnce(el))
 
-		const result = await main(textLoader, logger, prompt, config)
+		const result = await main(new GameStateFactoryFake(config, new Randomizer()), textLoader, logger, prompt, config)
 		expect(result).toEqual(0)
 		expect(logger.printWithColors).toHaveBeenCalledWith(response, 'magenta', '', 'bright')
 	})
 	test('End by losing', async () => {
 		;['Angelo', '1', 'exit'].forEach((el) => prompt.ask.mockReturnValueOnce(el))
-
-		const result = await main(textLoader, logger, prompt, config)
+		const result = await main(new GameStateFactoryFake(config, new Randomizer()), textLoader, logger, prompt)
 		expect(result).toEqual(0)
 		expect(logger.printWithColors).toHaveBeenCalledWith(
 			`You exit the castle happily finally enjoying the fresh air, but suddenly you remember: Ops! The princess!
@@ -114,7 +142,7 @@ GAME OVER
 			'attack'
 		].forEach((el) => prompt.ask.mockReturnValueOnce(el))
 
-		const result = await main(textLoader, logger, prompt, config)
+		const result = await main(new GameStateFactoryFake(config, new Randomizer()), textLoader, logger, prompt)
 		expect(result).toEqual(0)
 		expect(logger.printWithColors).toHaveBeenCalledWith(
 			'Dracula drains you of your blood while you helplessly struggle to hurt him.',
@@ -132,7 +160,8 @@ GAME OVER
 	test('Death by Medusa', async () => {
 		;['Angelo', '1', 'move east', 'move south', 'attack'].forEach((el) => prompt.ask.mockReturnValueOnce(el))
 
-		const result = await main(textLoader, logger, prompt, config)
+		const result = await main(new GameStateFactoryFake(config, new Randomizer()), textLoader, logger, prompt)
+
 		expect(result).toEqual(0)
 		expect(logger.printWithColors).toHaveBeenCalledWith(
 			"Medusa's gaze turns you to stone as you foolishly attack her.",
@@ -145,6 +174,34 @@ GAME OVER
 GAME OVER
 `,
 			'magenta'
+		)
+	})
+	test('Cannot drop 7 nuggets', async () => {
+		;['Angelo', '1', 'pick golden nugget', 'drop golden nugget', 'exit'].forEach((el) =>
+			prompt.ask.mockReturnValueOnce(el)
+		)
+
+		const result = await main(
+			new GameStateFactoryFake(config, new Randomizer(), [
+				[1, 1],
+				[1, 1],
+				[1, 1],
+				[1, 1],
+				[1, 1],
+				[1, 1],
+				[1, 1]
+			]),
+			textLoader,
+			logger,
+			prompt
+		)
+
+		expect(result).toEqual(0)
+		expect(logger.printWithColors).toHaveBeenCalledWith(
+			'The room is full, you can not drop any object',
+			'magenta',
+			'',
+			'bright'
 		)
 	})
 })

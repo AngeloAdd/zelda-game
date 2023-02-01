@@ -90,7 +90,7 @@ module.exports = class GameUI {
 		this.logger.printWithColors(
 			this.textLoader.getTextByKey('bag.capacity', {
 				itemsNumber: playerBagStatus.length,
-				capacity: 3
+				capacity: this.game.state.playerBagCapacity
 			}),
 			'green'
 		)
