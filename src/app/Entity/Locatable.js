@@ -3,7 +3,7 @@ module.exports = class Locatable {
 		this.roomCoordinates = roomCoordinates
 	}
 
-	getroomCoordinates() {
+	getRoomCoordinates() {
 		return this.roomCoordinates
 	}
 }

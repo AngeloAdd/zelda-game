@@ -9,9 +9,8 @@ const Coordinates = require('../app/utils/Coordinates')
 const Exits = require('../app/utils/Exits')
 
 module.exports = class GameStateFactory {
-	constructor(config, randomizer) {
+	constructor(config) {
 		this.config = config
-		this.randomizer = randomizer
 	}
 
 	createWithDifficulty(difficulty) {

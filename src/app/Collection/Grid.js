@@ -1,6 +1,6 @@
 const locate = require('../utils/locate')
 
-module.exports = class RoomsCollection {
+module.exports = class Grid {
 	constructor(rooms, currentRoom) {
 		this.rooms = rooms
 		this.currentroomCoordinates = currentRoom

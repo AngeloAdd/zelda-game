@@ -1,6 +1,6 @@
 const PlayerCommand = require('./utils/PlayerCommand')
-const ucFirst = require('./utils/ucFirst')
 const Difficulty = require('./utils/Difficulty')
+const ucFirst = require('./utils/ucFirst')
 
 const SUCCESS_EXIT = 0
 const FAIL_EXIT = 1
